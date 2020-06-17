@@ -1,11 +1,18 @@
 import React from "react";
-import MainPage from "../../../main.jsx";
+import PropTypes from "prop-types";
+import MainPage from "../main/main.jsx";
 
 const App = (props) => {
-  // eslint-disable-next-line react/prop-types
-  const {numberOfOffers} = props;
+  const {numberOfOffers, offersTitles} = props;
 
-  return <MainPage numberOfOffers={numberOfOffers}/>;
+  return <MainPage
+    numberOfOffers={numberOfOffers}
+    offersTitles={offersTitles}/>;
+};
+
+App.propTypes = {
+  numberOfOffers: PropTypes.number,
+  offersTitles: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default App;
