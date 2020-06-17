@@ -11,8 +11,8 @@ const App = (props) => {
 };
 
 App.propTypes = {
-  numberOfOffers: PropTypes.number,
-  offersTitles: PropTypes.arrayOf(PropTypes.string)
+  numberOfOffers: PropTypes.number.isRequired,
+  offersTitles: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 export default App;
