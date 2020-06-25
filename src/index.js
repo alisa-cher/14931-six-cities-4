@@ -10,6 +10,7 @@ const init = () => {
       <App
         numberOfOffers={numberOfOffers}
         offersTitles={offersTitles}
+        onCardTitleClick={() =>{}}
       />,
       document.querySelector(`#root`)
   );
