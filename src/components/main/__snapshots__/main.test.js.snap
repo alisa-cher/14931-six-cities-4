@@ -164,7 +164,7 @@ exports[`Main page renders correctly 1`] = `
           <b
             className="places__found"
           >
-            7
+            2
              places to stay in Amsterdam
           </b>
           <form
@@ -226,6 +226,7 @@ exports[`Main page renders correctly 1`] = `
           >
             <article
               className="cities__place-card place-card"
+              onMouseEnter={[Function]}
             >
               <div
                 className="place-card__mark"
@@ -261,7 +262,8 @@ exports[`Main page renders correctly 1`] = `
                     <b
                       className="place-card__price-value"
                     >
-                      €120
+                      €
+                      140
                     </b>
                     <span
                       className="place-card__price-text"
@@ -316,26 +318,20 @@ exports[`Main page renders correctly 1`] = `
                   <a
                     href="#"
                   >
-                    Beautiful & luxurious apartment at great location
+                    just amazing1
                   </a>
                 </h2>
                 <p
                   className="place-card__type"
                 >
-                  Apartment
+                  appartement
                 </p>
               </div>
             </article>
             <article
               className="cities__place-card place-card"
+              onMouseEnter={[Function]}
             >
-              <div
-                className="place-card__mark"
-              >
-                <span>
-                  Premium
-                </span>
-              </div>
               <div
                 className="cities__image-wrapper place-card__image-wrapper"
               >
@@ -346,7 +342,7 @@ exports[`Main page renders correctly 1`] = `
                     alt="Place image"
                     className="place-card__image"
                     height="200"
-                    src="img/apartment-01.jpg"
+                    src="img/apartment-02.jpg"
                     width="260"
                   />
                 </a>
@@ -363,7 +359,8 @@ exports[`Main page renders correctly 1`] = `
                     <b
                       className="place-card__price-value"
                     >
-                      €120
+                      €
+                      45
                     </b>
                     <span
                       className="place-card__price-text"
@@ -418,13 +415,13 @@ exports[`Main page renders correctly 1`] = `
                   <a
                     href="#"
                   >
-                    Wood and stone place
+                    just amazing2
                   </a>
                 </h2>
                 <p
                   className="place-card__type"
                 >
-                  Apartment
+                  room
                 </p>
               </div>
             </article>

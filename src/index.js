@@ -1,15 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/app/app.jsx";
-
-const numberOfOffers = 17;
-const offersTitles = [`Beautiful & luxurious apartment at great location`, `Wood and stone place`, `Canal View Prinsengracht`, `Nice, cozy, warm big bed apartment`];
+import {offers} from "./mocks/offers.js";
 
 const init = () => {
   ReactDOM.render(
       <App
-        numberOfOffers={numberOfOffers}
-        offersTitles={offersTitles}
+        offers={offers}
         onCardTitleClick={() =>{}}
       />,
       document.querySelector(`#root`)
