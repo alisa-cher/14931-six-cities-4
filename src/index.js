@@ -7,7 +7,6 @@ const init = () => {
   ReactDOM.render(
       <App
         offers={offers}
-        onCardTitleClick={() =>{}}
       />,
       document.querySelector(`#root`)
   );

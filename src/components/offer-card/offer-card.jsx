@@ -1,10 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {Link} from 'react-router-dom';
 
 class OfferCard extends React.PureComponent {
   constructor(props) {
     super(props);
     this._onCardHover = this._onCardHover.bind(this);
+    this._onCardClick = this._onCardClick.bind(this);
   }
 
   _onCardHover() {
@@ -12,19 +14,25 @@ class OfferCard extends React.PureComponent {
     onCardHover(offer);
   }
 
+  _onCardClick() {
+    const {onCardTitleClick, offer} = this.props;
+    // console.log(offer, 'что попало в обработчик _onCardClick, вызванный в карточке предложения');
+    onCardTitleClick(offer);
+  }
+
   render() {
-    const {offer, onCardTitleClick} = this.props;
-    const {description, isPremium, photo, price, type} = offer;
+    const {offer} = this.props;
+    const {title, isPremium, previewPhoto, price, type} = offer;
     return (
       <article className="cities__place-card place-card" onMouseEnter={this._onCardHover}>
         {isPremium && <div className="place-card__mark">
           <span>Premium</span>
         </div>}
         <div className="cities__image-wrapper place-card__image-wrapper">
-          <a href="#">
-            <img className="place-card__image" src={photo} width="260" height="200"
+          <Link to='/property'>
+            <img className="place-card__image" src={previewPhoto} width="260" height="200"
               alt="Place image"/>
-          </a>
+          </Link>
         </div>
         <div className="place-card__info">
           <div className="place-card__price-wrapper">
@@ -45,8 +53,10 @@ class OfferCard extends React.PureComponent {
               <span className="visually-hidden">Rating</span>
             </div>
           </div>
-          <h2 className="place-card__name" onClick={onCardTitleClick}>
-            <a href="#">{description}</a>
+          <h2 className="place-card__name" onClick={this._onCardClick}>
+            <Link to='/property'>
+              {title}
+            </Link>
           </h2>
           <p className="place-card__type">{type}</p>
         </div>
@@ -55,9 +65,9 @@ class OfferCard extends React.PureComponent {
 }
 
 const offerShape = {
-  description: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   isPremium: PropTypes.bool.isRequired,
-  photo: PropTypes.string.isRequired,
+  previewPhoto: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
 };

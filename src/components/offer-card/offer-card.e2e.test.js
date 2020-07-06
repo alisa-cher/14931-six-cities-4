@@ -5,10 +5,10 @@ import OfferCard from "./offer-card";
 const offer = {
   type: `house`,
   price: 100,
-  description: `just amazing3`,
+  title: `just amazing3`,
   isPremium: false,
   rating: 2.3,
-  photo: `img/apartment-03.jpg`,
+  previewPhoto: `img/apartment-03.jpg`,
 };
 
 it(`Card is hovered`, () => {

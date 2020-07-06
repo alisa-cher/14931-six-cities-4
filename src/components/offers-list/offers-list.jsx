@@ -20,6 +20,8 @@ class OffersList extends React.PureComponent {
   render() {
     const {offers, onCardTitleClick} = this.props;
 
+    // console.log(onCardTitleClick, 'onCardTitleClick в списке предложений');
+
     return (
       <div className="cities__places-list places__list tabs__content">
         {offers.map((offer, id) =>

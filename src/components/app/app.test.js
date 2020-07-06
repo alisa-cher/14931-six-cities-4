@@ -5,10 +5,11 @@ import renderer from 'react-test-renderer';
 const offers = [{
   type: `appartement`,
   price: 140,
-  description: `just amazing1`,
+  title: `just amazing1`,
   isPremium: true,
   rating: 4.3,
   photo: `img/apartment-01.jpg`,
+  previewPhoto: `img/apartment-03.jpg`
 }];
 
 it(`App renders correctly`, () => {

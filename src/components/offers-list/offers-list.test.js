@@ -1,23 +1,26 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import OffersList from "../offers-list/offers-list.jsx";
+import {BrowserRouter} from "react-router-dom";
 
 it(`Offers list renders ok`, () => {
   const offers = [{
     type: `appartement`,
     price: 140,
-    description: `just amazing1`,
+    title: `just amazing1`,
     isPremium: true,
     rating: 4.3,
-    photo: `img/apartment-01.jpg`,
+    previewPhoto: `img/apartment-01.jpg`,
   }];
 
   const tree = renderer
     .create(
-        <OffersList
-          offers={offers}
-          onCardTitleClick={() => {}}
-        />
+        <BrowserRouter>
+          <OffersList
+            offers={offers}
+            onCardTitleClick={() => {}}
+          />
+        </BrowserRouter>
     )
     .toJSON();
   expect(tree).toMatchSnapshot();
