@@ -21,6 +21,7 @@ class App extends React.PureComponent {
 
   render() {
     const {offers} = this.props;
+    const detailedOffer = this.state.detailedOffer;
 
     return <BrowserRouter>
       <Switch>
@@ -31,7 +32,7 @@ class App extends React.PureComponent {
           />
         </Route>
         <Route exact path="/property">
-          {this.state.detailedOffer && <OfferDetails offer={this.state.detailedOffer}/>}
+          {detailedOffer && <OfferDetails offer={detailedOffer}/>}
         </Route>
       </Switch>
     </BrowserRouter>;

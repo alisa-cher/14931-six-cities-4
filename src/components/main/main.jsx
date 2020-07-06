@@ -6,8 +6,6 @@ const MainPage = (props) => {
   const {offers, onCardTitleClick} = props;
   const numberOfOffers = offers.length;
 
-  // console.log(onCardTitleClick, 'onCardTitleClick в главной странице');
-
   return (
     <div className="page page--gray page--main">
       <header className="header">

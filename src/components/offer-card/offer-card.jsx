@@ -16,7 +16,6 @@ class OfferCard extends React.PureComponent {
 
   _onCardClick() {
     const {onCardTitleClick, offer} = this.props;
-    // console.log(offer, 'что попало в обработчик _onCardClick, вызванный в карточке предложения');
     onCardTitleClick(offer);
   }
 
@@ -54,9 +53,7 @@ class OfferCard extends React.PureComponent {
             </div>
           </div>
           <h2 className="place-card__name" onClick={this._onCardClick}>
-            <Link to='/property'>
-              {title}
-            </Link>
+            <Link to='/property'>{title}</Link>
           </h2>
           <p className="place-card__type">{type}</p>
         </div>
