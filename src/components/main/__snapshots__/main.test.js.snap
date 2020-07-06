@@ -239,7 +239,8 @@ exports[`Main page renders correctly 1`] = `
                 className="cities__image-wrapper place-card__image-wrapper"
               >
                 <a
-                  href="#"
+                  href="/property"
+                  onClick={[Function]}
                 >
                   <img
                     alt="Place image"
@@ -316,7 +317,8 @@ exports[`Main page renders correctly 1`] = `
                   onClick={[Function]}
                 >
                   <a
-                    href="#"
+                    href="/property"
+                    onClick={[Function]}
                   >
                     just amazing1
                   </a>
@@ -336,7 +338,8 @@ exports[`Main page renders correctly 1`] = `
                 className="cities__image-wrapper place-card__image-wrapper"
               >
                 <a
-                  href="#"
+                  href="/property"
+                  onClick={[Function]}
                 >
                   <img
                     alt="Place image"
@@ -413,7 +416,8 @@ exports[`Main page renders correctly 1`] = `
                   onClick={[Function]}
                 >
                   <a
-                    href="#"
+                    href="/property"
+                    onClick={[Function]}
                   >
                     just amazing2
                   </a>

@@ -1,32 +1,35 @@
 import React from 'react';
 import MainPage from '../main/main.jsx';
 import renderer from 'react-test-renderer';
+import {BrowserRouter} from "react-router-dom";
 
 const offers = [{
   type: `appartement`,
   price: 140,
-  description: `just amazing1`,
+  title: `just amazing1`,
   isPremium: true,
   rating: 4.3,
-  photo: `img/apartment-01.jpg`,
+  previewPhoto: `img/apartment-01.jpg`,
 },
 {
   type: `room`,
   price: 45,
-  description: `just amazing2`,
+  title: `just amazing2`,
   isPremium: false,
   rating: 4.0,
-  photo: `img/apartment-02.jpg`,
+  previewPhoto: `img/apartment-02.jpg`,
 }];
 
 
 it(`Main page renders correctly`, () => {
   const tree = renderer
     .create(
-        <MainPage
-          offers={offers}
-          onCardTitleClick={() => {
-          }}/>
+        <BrowserRouter>
+          <MainPage
+            offers={offers}
+            onCardTitleClick={() => {
+            }}/>
+        </BrowserRouter>
     )
     .toJSON();
   expect(tree).toMatchSnapshot();
