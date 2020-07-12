@@ -5,6 +5,7 @@ import leaflet from "leaflet";
 class Map extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.myRef = React.createRef();
   }
 
   _setMarkers(offers, map, icon) {
