@@ -1,6 +1,6 @@
 import React from 'react';
-import OfferDetails from '../offer-details/offer-details.jsx';
 import renderer from 'react-test-renderer';
+import OfferDetails from '../offer-details/offer-details.jsx';
 
 const offer = {
   bedrooms: 3,
