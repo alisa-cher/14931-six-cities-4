@@ -3,6 +3,8 @@ import MainPage from '../main/main.jsx';
 import {mount} from 'enzyme';
 import {BrowserRouter} from "react-router-dom";
 
+jest.mock(`../map/map.jsx`, () => jest.fn().mockReturnValue(null));
+
 const offers = [{
   type: `appartement`,
   price: 140,

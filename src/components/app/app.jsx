@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import MainPage from "../main/main.jsx";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
+import MainPage from "../main/main.jsx";
 import OfferDetails from "../offer-details/offer-details.jsx";
 
 class App extends React.PureComponent {

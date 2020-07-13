@@ -16,6 +16,10 @@ export const offers = [
       isPro: true,
       name: `Angelina`
     },
+    location: {
+      latitude: 52.3909553943508,
+      longitude: 4.85309666406198,
+    },
   },
   {
     bedrooms: 1,
@@ -33,6 +37,10 @@ export const offers = [
       avatar: `img/avatar-max.jpg`,
       isPro: false,
       name: `Angelina2`
+    },
+    location: {
+      latitude: 52.369553943508,
+      longitude: 4.85309666406198,
     },
   },
   {
@@ -52,6 +60,10 @@ export const offers = [
       isPro: true,
       name: `Jane1`
     },
+    location: {
+      latitude: 52.3909553943508,
+      longitude: 4.929309666406198,
+    },
   },
   {
     bedrooms: 5,
@@ -69,6 +81,10 @@ export const offers = [
       avatar: `img/avatar.svg`,
       isPro: false,
       name: `Jane`
+    },
+    location: {
+      latitude: 52.3809553943508,
+      longitude: 4.939309666406198,
     },
   }
 ];

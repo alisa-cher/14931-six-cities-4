@@ -2,6 +2,8 @@ import React from 'react';
 import App from '../app/app.jsx';
 import renderer from 'react-test-renderer';
 
+jest.mock(`../map/map`, () => jest.fn().mockReturnValue(null));
+
 const offers = [{
   type: `appartement`,
   price: 140,
