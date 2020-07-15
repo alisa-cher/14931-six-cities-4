@@ -7,7 +7,7 @@ const Comment = (props) => {
   const {name: userName, avatarUrl} = user;
 
   const commentDate = new Date(date);
-  const month = commentDate.toLocaleString(`en-UK`, {day: `numeric`, month: `long`, year: `numeric`});
+  const formattedDate = commentDate.toLocaleString(`en-UK`, {day: `numeric`, month: `long`, year: `numeric`});
 
   return (
     <Tag className="reviews__item">
@@ -30,7 +30,7 @@ const Comment = (props) => {
         </p>
         <time className="reviews__time" dateTime={
           commentDate.getFullYear() + `-` + (commentDate.getMonth() + 1) + `-` + commentDate.getDate()}>
-          {month + ` `}
+          {formattedDate + ` `}
         </time>
       </div>
     </Tag>
