@@ -225,7 +225,7 @@ exports[`App renders correctly 1`] = `
             className="places__list cities__list"
           >
             <article
-              className="cities__card place-card"
+              className="place-card cities__card"
               onMouseEnter={[Function]}
             >
               <div

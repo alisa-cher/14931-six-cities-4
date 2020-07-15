@@ -22,9 +22,11 @@ class OfferCard extends React.PureComponent {
   render() {
     const {offer, classNamePrefix} = this.props;
     const {title, isPremium, previewPhoto, price, type} = offer;
+    const getClass = (prefix) => prefix ? `place-card ` + prefix + `__card` : `place-card`;
+
     return (
       <article
-        className={classNamePrefix ? classNamePrefix + `__card place-card` : `place-card`}
+        className={getClass(classNamePrefix)}
         onMouseEnter={this._onCardHover}>
         {isPremium && <div className="place-card__mark">
           <span>Premium</span>

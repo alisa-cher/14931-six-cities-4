@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import FeedbackList from "../comments-list/comments-list.jsx";
+import CommentsList from "../comments-list/comments-list.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
 import Map from "../map/map.jsx";
 import {sliceAnArray} from "../../helpers.js";
@@ -11,7 +11,10 @@ const OfferDetails = (props) => {
   const {avatar, isPro, name} = host;
   const commentsLength = comments.length;
   const NEARBY_OFFERS_MAX_AMOUNT = 3;
+  const COMMENTS_MAX_AMOUNT = 10;
   const offersToRender = sliceAnArray(nearbyOffers, NEARBY_OFFERS_MAX_AMOUNT);
+  const commentsToRender = sliceAnArray(comments, COMMENTS_MAX_AMOUNT);
+  const sortedComments = commentsToRender.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
 
   return (
     <div className="page">
@@ -115,7 +118,7 @@ const OfferDetails = (props) => {
               </div>
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{commentsLength}</span></h2>
-                <FeedbackList comments={comments}/>
+                <CommentsList comments={sortedComments}/>
                 <form className="reviews__form form" action="#" method="post">
                   <label className="reviews__label form__label" htmlFor="review">Your review</label>
                   <div className="reviews__rating-form form__rating">

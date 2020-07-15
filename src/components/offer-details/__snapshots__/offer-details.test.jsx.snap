@@ -342,8 +342,7 @@ exports[`Property page renders correctly 1`] = `
                     className="reviews__time"
                     dateTime="2020-6-17"
                   >
-                    June 
-                    2020
+                    June 17, 2020 
                   </time>
                 </div>
               </li>
@@ -530,7 +529,7 @@ exports[`Property page renders correctly 1`] = `
           className="places__list near-places__list"
         >
           <article
-            className="near-places__card place-card"
+            className="place-card near-places__card"
             onMouseEnter={[Function]}
           >
             <div

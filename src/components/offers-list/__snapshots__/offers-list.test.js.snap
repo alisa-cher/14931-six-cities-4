@@ -5,7 +5,7 @@ exports[`Offers list renders ok 1`] = `
   className="places__list just-some-prefix-for-tests__list"
 >
   <article
-    className="just-some-prefix-for-tests__card place-card"
+    className="place-card just-some-prefix-for-tests__card"
     onMouseEnter={[Function]}
   >
     <div

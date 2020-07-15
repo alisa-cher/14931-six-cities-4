@@ -2,7 +2,7 @@
 
 exports[`Offer card renders ok 1`] = `
 <article
-  className="just-some-prefix-for-tests__card place-card"
+  className="place-card just-some-prefix-for-tests__card"
   onMouseEnter={[Function]}
 >
   <div

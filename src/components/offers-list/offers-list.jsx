@@ -19,9 +19,10 @@ class OffersList extends React.PureComponent {
 
   render() {
     const {offers, onCardTitleClick, classNamePrefix} = this.props;
+    const getClass = (prefix) => prefix ? `places__list ` + prefix + `__list` : `places__list`;
 
     return (
-      <div className={classNamePrefix ? `places__list ` + classNamePrefix + `__list` : `places__list`}>
+      <div className={getClass(classNamePrefix)}>
         {offers.map((offer, id) =>
           <OfferCard
             key={offer + id}
