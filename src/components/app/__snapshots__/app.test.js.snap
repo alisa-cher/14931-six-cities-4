@@ -222,10 +222,10 @@ exports[`App renders correctly 1`] = `
             </ul>
           </form>
           <div
-            className="cities__places-list places__list tabs__content"
+            className="places__list cities__list"
           >
             <article
-              className="cities__place-card place-card"
+              className="cities__card place-card"
               onMouseEnter={[Function]}
             >
               <div

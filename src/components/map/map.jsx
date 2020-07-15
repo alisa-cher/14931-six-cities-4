@@ -7,17 +7,21 @@ class Map extends React.PureComponent {
     super(props);
   }
 
+  _initMarker(offer, map, icon) {
+    leaflet
+      .marker([offer.location.latitude, offer.location.longitude], {icon})
+      .addTo(map);
+  }
+
   _setMarkers(offers, map, icon) {
     offers.forEach((offer) => {
-      leaflet
-        .marker([offer.location.latitude, offer.location.longitude], {icon})
-        .addTo(map);
+      this._initMarker(offer, map, icon);
     });
   }
 
-  _initIcon() {
+  _initIcon(iconUrl) {
     return leaflet.icon({
-      iconUrl: `img/pin.svg`,
+      iconUrl,
       iconSize: [30, 30]
     });
   }
@@ -46,14 +50,18 @@ class Map extends React.PureComponent {
   }
 
   componentDidMount() {
-    const {offers} = this.props;
+    const {offers, activeOffer} = this.props;
     const city = [52.38333, 4.9];
-    const icon = this._initIcon();
+    const icon = this._initIcon(`img/pin.svg`);
+    const activeIcon = this._initIcon(`img/pin-active.svg`);
     const zoom = 12;
     const map = this._setMap(city, zoom);
     map.setView(city, zoom);
     this._setMapBackground(map);
     this._setMarkers(offers, map, icon);
+    if (activeOffer) {
+      this._initMarker(activeOffer, map, activeIcon);
+    }
   }
 }
 
@@ -63,7 +71,8 @@ const coordinate = {
 };
 
 Map.propTypes = {
-  offers: PropTypes.arrayOf(PropTypes.shape({location: PropTypes.shape(coordinate)})).isRequired
+  offers: PropTypes.arrayOf(PropTypes.shape({location: PropTypes.shape(coordinate)})).isRequired,
+  activeOffer: PropTypes.object,
 };
 
 export default Map;

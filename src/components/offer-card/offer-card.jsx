@@ -20,14 +20,16 @@ class OfferCard extends React.PureComponent {
   }
 
   render() {
-    const {offer} = this.props;
+    const {offer, classNamePrefix} = this.props;
     const {title, isPremium, previewPhoto, price, type} = offer;
     return (
-      <article className="cities__place-card place-card" onMouseEnter={this._onCardHover}>
+      <article
+        className={classNamePrefix ? classNamePrefix + `__card place-card` : `place-card`}
+        onMouseEnter={this._onCardHover}>
         {isPremium && <div className="place-card__mark">
           <span>Premium</span>
         </div>}
-        <div className="cities__image-wrapper place-card__image-wrapper">
+        <div className={classNamePrefix + `__image-wrapper place-card__image-wrapper`}>
           <Link to='/property'>
             <img className="place-card__image" src={previewPhoto} width="260" height="200"
               alt="Place image"/>
@@ -72,7 +74,8 @@ const offerShape = {
 OfferCard.propTypes = {
   offer: PropTypes.shape(offerShape).isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
-  onCardHover: PropTypes.func.isRequired
+  onCardHover: PropTypes.func.isRequired,
+  classNamePrefix: PropTypes.string.isRequired
 };
 
 export default OfferCard;

@@ -2,10 +2,10 @@
 
 exports[`Offers list renders ok 1`] = `
 <div
-  className="cities__places-list places__list tabs__content"
+  className="places__list just-some-prefix-for-tests__list"
 >
   <article
-    className="cities__place-card place-card"
+    className="just-some-prefix-for-tests__card place-card"
     onMouseEnter={[Function]}
   >
     <div
@@ -16,7 +16,7 @@ exports[`Offers list renders ok 1`] = `
       </span>
     </div>
     <div
-      className="cities__image-wrapper place-card__image-wrapper"
+      className="just-some-prefix-for-tests__image-wrapper place-card__image-wrapper"
     >
       <a
         href="/property"
