@@ -19,6 +19,7 @@ it(`Offers list renders ok`, () => {
           <OffersList
             offers={offers}
             onCardTitleClick={() => {}}
+            classNamePrefix={`just-some-prefix-for-tests`}
           />
         </BrowserRouter>
     )

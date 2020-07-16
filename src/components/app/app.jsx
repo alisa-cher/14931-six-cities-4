@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import MainPage from "../main/main.jsx";
 import OfferDetails from "../offer-details/offer-details.jsx";
+import comments from "../../mocks/comments";
 
 class App extends React.PureComponent {
   constructor(props) {
@@ -32,7 +33,11 @@ class App extends React.PureComponent {
           />
         </Route>
         <Route exact path="/property">
-          {detailedOffer && <OfferDetails offer={detailedOffer}/>}
+          {detailedOffer && <OfferDetails
+            offer={detailedOffer}
+            nearbyOffers={offers}
+            comments={comments}
+            onCardTitleClick={this._setActiveCard}/>}
         </Route>
       </Switch>
     </BrowserRouter>;

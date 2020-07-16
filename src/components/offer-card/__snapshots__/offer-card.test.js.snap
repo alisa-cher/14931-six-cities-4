@@ -2,7 +2,7 @@
 
 exports[`Offer card renders ok 1`] = `
 <article
-  className="cities__place-card place-card"
+  className="place-card just-some-prefix-for-tests__card"
   onMouseEnter={[Function]}
 >
   <div
@@ -13,7 +13,7 @@ exports[`Offer card renders ok 1`] = `
     </span>
   </div>
   <div
-    className="cities__image-wrapper place-card__image-wrapper"
+    className="just-some-prefix-for-tests__image-wrapper place-card__image-wrapper"
   >
     <a
       href="/property"

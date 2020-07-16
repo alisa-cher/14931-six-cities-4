@@ -20,6 +20,7 @@ it(`Offer card renders ok`, () => {
             onCardTitleClick={() => {}}
             onCardHover={() => {}}
             offer={offer}
+            classNamePrefix={`just-some-prefix-for-tests`}
           />
         </BrowserRouter>
     )

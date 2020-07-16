@@ -19,6 +19,7 @@ it(`Card is hovered`, () => {
         onCardTitleClick={() => {}}
         onCardHover={clickHandler}
         offer={offer}
+        classNamePrefix={`just-some-prefix-for-tests`}
       />
   );
   offerCard.simulate(`mouseEnter`);
