@@ -14,6 +14,7 @@ const offers = [{
   previewPhoto: `img/apartment-01.jpg`,
 }];
 
+// TOASK: этот тест вообще, наверное, тут не нужен. Его лучше перенести в карточку отеля.
 it(`Card title is clicked`, () => {
   const clickHandler = jest.fn();
 
@@ -28,3 +29,4 @@ it(`Card title is clicked`, () => {
   cardTitle.simulate(`click`);
   expect(clickHandler).toHaveBeenCalled();
 });
+

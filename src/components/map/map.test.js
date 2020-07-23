@@ -16,7 +16,11 @@ it(`Map renders ok`, () => {
 
   const tree = renderer
     .create(
-        <Map offers={offers}/>
+        <Map
+          offers={offers}
+          cityCoords={[0, 2]}
+          cityZoom={1}
+        />
     )
     .toJSON();
   expect(tree).toMatchSnapshot();

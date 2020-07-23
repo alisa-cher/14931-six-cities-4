@@ -11,7 +11,7 @@ const offers = [{
   title: `just amazing1`,
   isPremium: true,
   rating: 4.3,
-  previewPhoto: `img/apartment-01.jpg`,
+  previewPhoto: `img/apartment-01.jpg`
 },
 {
   type: `room`,
@@ -19,7 +19,16 @@ const offers = [{
   title: `just amazing2`,
   isPremium: false,
   rating: 4.0,
-  previewPhoto: `img/apartment-02.jpg`,
+  previewPhoto: `img/apartment-02.jpg`
+}];
+
+const locations = [{
+  location: {
+    latitude: 1,
+    longitude: 2,
+    zoom: 0
+  },
+  name: `Paris`
 }];
 
 it(`Main page renders correctly`, () => {
@@ -28,8 +37,12 @@ it(`Main page renders correctly`, () => {
         <BrowserRouter>
           <MainPage
             offers={offers}
-            onCardTitleClick={() => {
-            }}/>
+            locations={locations}
+            activeLocation={locations[0]}
+            cityCoords={[0, 2]}
+            cityZoom={1}
+            onCardTitleClick={() => {}}
+            onMenuClick={() => {}}/>
         </BrowserRouter>
     )
     .toJSON();

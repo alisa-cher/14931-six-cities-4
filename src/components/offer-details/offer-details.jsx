@@ -4,9 +4,18 @@ import CommentsList from "../comments-list/comments-list.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
 import Map from "../map/map.jsx";
 import {sliceAnArray} from "../../helpers.js";
+import {detailedOfferShape, offerShape} from "../../types.js";
 
 const OfferDetails = (props) => {
-  const {offer, nearbyOffers, comments, onCardTitleClick} = props;
+  const {
+    offer,
+    nearbyOffers,
+    comments,
+    onCardTitleClick,
+    cityCoords,
+    cityZoom
+  } = props;
+
   const {title, description, rating, isPremium, photos, price, type, goods, host, bedrooms, maxAdults} = offer;
   const {avatar, isPro, name} = host;
   const commentsLength = comments.length;
@@ -177,8 +186,11 @@ const OfferDetails = (props) => {
             </div>
           </div>
           <section className="property__map map">
-            <Map offers={offersToRender}
+            <Map
+              offers={offersToRender}
               activeOffer={offer}
+              cityCoords={cityCoords}
+              cityZoom={cityZoom}
             />
           </section>
         </section>
@@ -197,29 +209,13 @@ const OfferDetails = (props) => {
   );
 };
 
-const hostShape = {
-  avatar: PropTypes.string.isRequired,
-  isPro: PropTypes.bool.isRequired,
-  name: PropTypes.string.isRequired,
-};
-
-const detailedOfferShape = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  rating: PropTypes.number.isRequired,
-  photos: PropTypes.arrayOf(PropTypes.string).isRequired,
-  isPremium: PropTypes.bool.isRequired,
-  price: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired,
-  goods: PropTypes.arrayOf(PropTypes.string).isRequired,
-  host: PropTypes.shape(hostShape).isRequired,
-};
-
 OfferDetails.propTypes = {
   offer: PropTypes.shape(detailedOfferShape).isRequired,
-  nearbyOffers: PropTypes.arrayOf(PropTypes.object).isRequired,
+  nearbyOffers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired,
   comments: PropTypes.array.isRequired,
-  onCardTitleClick: PropTypes.func.isRequired
+  onCardTitleClick: PropTypes.func.isRequired,
+  cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
+  cityZoom: PropTypes.number.isRequired,
 };
 
 export default OfferDetails;
