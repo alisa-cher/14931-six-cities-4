@@ -39,14 +39,7 @@ const mockedOffer = {
     latitude: 50.842557,
     longitude: 4.3536969999999995,
   },
-  city: {
-    location: {
-      latitude: 50.85045,
-      longitude: 4.34878,
-      zoom: 12
-    },
-    name: `Brussels`
-  },
+  city: mockedCity
 };
 
 const offers = [mockedOffer, mockedOffer];
@@ -60,7 +53,14 @@ it(`App renders correctly`, () => {
   const tree = renderer
     .create(
         <Provider store={store}>
-          <App/>
+          <App
+            city={mockedOffer.city}
+            cityZoom={12}
+            locations={[mockedCity, mockedCity]}
+            cityCoords={[mockedCity.latitude, mockedCity.longitude]}
+            offers={offers}
+            onMenuClick={() => {}}
+          />
         </Provider>, {
           createNodeMock: () => {
             return {};
