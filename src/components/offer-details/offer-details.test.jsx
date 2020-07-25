@@ -43,6 +43,8 @@ it(`Property page renders correctly`, () => {
             comments={comments}
             onCardTitleClick={() => {
             }}
+            cityCoords={[0, 2]}
+            cityZoom={1}
           />
         </BrowserRouter>
     )

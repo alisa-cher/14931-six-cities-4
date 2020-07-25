@@ -1,6 +1,6 @@
 import React from "react";
-import Comment from "../comment/comment.jsx";
 import PropTypes from "prop-types";
+import Comment from "../comment/comment.jsx";
 
 const CommentsList = (props) => {
   const {comments} = props;

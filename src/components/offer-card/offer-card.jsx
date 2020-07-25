@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Link} from 'react-router-dom';
+import {offerShape} from "../../types.js";
 
 class OfferCard extends React.PureComponent {
   constructor(props) {
@@ -64,14 +65,6 @@ class OfferCard extends React.PureComponent {
       </article>);
   }
 }
-
-const offerShape = {
-  title: PropTypes.string.isRequired,
-  isPremium: PropTypes.bool.isRequired,
-  previewPhoto: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired,
-};
 
 OfferCard.propTypes = {
   offer: PropTypes.shape(offerShape).isRequired,

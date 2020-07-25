@@ -17,8 +17,16 @@ export const offers = [
       name: `Angelina`
     },
     location: {
-      latitude: 52.3909553943508,
-      longitude: 4.85309666406198,
+      latitude: 50.842557,
+      longitude: 4.3536969999999995,
+    },
+    city: {
+      location: {
+        latitude: 50.85045,
+        longitude: 4.34878,
+        zoom: 12
+      },
+      name: `Brussels`
     },
   },
   {
@@ -39,8 +47,16 @@ export const offers = [
       name: `Angelina2`
     },
     location: {
-      latitude: 52.369553943508,
-      longitude: 4.85309666406198,
+      latitude: 52.385540000000006,
+      longitude: 4.886976,
+    },
+    city: {
+      location: {
+        latitude: 52.37454,
+        longitude: 4.897976,
+        zoom: 13
+      },
+      name: `Amsterdam`
     },
   },
   {
@@ -61,8 +77,16 @@ export const offers = [
       name: `Jane1`
     },
     location: {
-      latitude: 52.3909553943508,
-      longitude: 4.929309666406198,
+      latitude: 53.558341000000006,
+      longitude: 10.001654,
+    },
+    city: {
+      location: {
+        latitude: 53.550341,
+        longitude: 10.000654,
+        zoom: 13
+      },
+      name: `Hamburg`
     },
   },
   {
@@ -83,8 +107,16 @@ export const offers = [
       name: `Jane`
     },
     location: {
-      latitude: 52.3809553943508,
-      longitude: 4.939309666406198,
+      latitude: 51.236402000000005,
+      longitude: 6.784314,
+    },
+    city: {
+      location: {
+        latitude: 51.225402,
+        longitude: 6.776314,
+        zoom: 10
+      },
+      name: `Dusseldorf`
     },
   }
 ];
