@@ -17,6 +17,7 @@ it(`Card is hovered`, () => {
   const offerCard = shallow(
       <OfferCard
         onCardTitleClick={() => {}}
+        onMouseLeave={() => {}}
         onCardHover={clickHandler}
         offer={offer}
         classNamePrefix={`just-some-prefix-for-tests`}

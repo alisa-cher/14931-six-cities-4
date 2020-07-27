@@ -9,9 +9,12 @@ import {detailedOfferShape, offerShape} from "../../types.js";
 const OfferDetails = (props) => {
   const {
     offer,
+    activeCard,
     nearbyOffers,
     comments,
     onCardTitleClick,
+    onCardHover,
+    onCardMouseLeave,
     cityCoords,
     cityZoom
   } = props;
@@ -188,7 +191,8 @@ const OfferDetails = (props) => {
           <section className="property__map map">
             <Map
               offers={offersToRender}
-              activeOffer={offer}
+              detailedOffer={offer}
+              activeCard={activeCard}
               cityCoords={cityCoords}
               cityZoom={cityZoom}
             />
@@ -200,6 +204,8 @@ const OfferDetails = (props) => {
             <OffersList
               offers={offersToRender}
               onCardTitleClick={onCardTitleClick}
+              onCardHover={onCardHover}
+              onCardMouseLeave={onCardMouseLeave}
               classNamePrefix={`near-places`}
             />
           </section>
@@ -211,11 +217,14 @@ const OfferDetails = (props) => {
 
 OfferDetails.propTypes = {
   offer: PropTypes.shape(detailedOfferShape).isRequired,
+  activeCard: PropTypes.object,
   nearbyOffers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired,
   comments: PropTypes.array.isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
   cityZoom: PropTypes.number.isRequired,
+  onCardHover: PropTypes.func.isRequired,
+  onCardMouseLeave: PropTypes.func.isRequired
 };
 
 export default OfferDetails;

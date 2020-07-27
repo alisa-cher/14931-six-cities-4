@@ -8,11 +8,17 @@ class OfferCard extends React.PureComponent {
     super(props);
     this._onCardHover = this._onCardHover.bind(this);
     this._onCardClick = this._onCardClick.bind(this);
+    this._onMouseLeave = this._onMouseLeave.bind(this);
   }
 
   _onCardHover() {
     const {onCardHover, offer} = this.props;
     onCardHover(offer);
+  }
+
+  _onMouseLeave() {
+    const {onMouseLeave} = this.props;
+    onMouseLeave();
   }
 
   _onCardClick() {
@@ -28,7 +34,8 @@ class OfferCard extends React.PureComponent {
     return (
       <article
         className={getClass(classNamePrefix)}
-        onMouseEnter={this._onCardHover}>
+        onMouseEnter={this._onCardHover}
+        onMouseLeave={this._onMouseLeave}>
         {isPremium && <div className="place-card__mark">
           <span>Premium</span>
         </div>}
@@ -70,7 +77,8 @@ OfferCard.propTypes = {
   offer: PropTypes.shape(offerShape).isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   onCardHover: PropTypes.func.isRequired,
-  classNamePrefix: PropTypes.string.isRequired
+  classNamePrefix: PropTypes.string.isRequired,
+  onMouseLeave: PropTypes.func.isRequired
 };
 
 export default OfferCard;

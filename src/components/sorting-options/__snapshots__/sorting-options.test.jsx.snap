@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SortingOptions renders ok 1`] = `
+<form
+  action="#"
+  className="places__sorting"
+  method="get"
+>
+  <span
+    className="places__sorting-caption"
+  >
+    Sort by
+  </span>
+  <select
+    className="places__sorting-type"
+    id="places-sorting"
+    onChange={[Function]}
+  >
+    <option
+      className="places__option"
+      defaultValue="popular"
+      value="popular"
+    >
+      Popular
+    </option>
+    <option
+      className="places__option"
+      defaultValue="popular"
+      value="to-high"
+    >
+      Price: low to high
+    </option>
+    <option
+      className="places__option"
+      defaultValue="popular"
+      value="to-low"
+    >
+      Price: high to low
+    </option>
+    <option
+      className="places__option"
+      defaultValue="popular"
+      value="top-rated"
+    >
+      Top rated first
+    </option>
+  </select>
+</form>
+`;

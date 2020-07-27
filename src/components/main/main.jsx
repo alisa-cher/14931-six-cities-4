@@ -6,18 +6,21 @@ import Map from "../map/map.jsx";
 import LocationsList from "../locations-list/locations-list.jsx";
 import {cityShape} from "../../types.js";
 
-// TOASK: нет ли тут пропс-дриллинга? вложенность два уровня. Когда стоит коннектить к стору
-// что-то кроме аппа?
-
 const MainPage = (props) => {
   const {
     offers,
     locations,
+    activeSorting,
     cityCoords,
     cityZoom,
     activeLocation,
     onCardTitleClick,
-    onMenuClick
+    onCardHover,
+    onCardMouseLeave,
+    onMenuClick,
+    onSortingClick,
+    activeCard,
+    detailedOffer,
   } = props;
 
   const numberOfOffers = offers.length;
@@ -60,10 +63,15 @@ const MainPage = (props) => {
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{numberOfOffers} places to stay in {activeLocationName}</b>
-              <SortingOptions/>
+              <SortingOptions
+                onSortingClick={onSortingClick}
+                activeSorting={activeSorting}
+              />
               <OffersList
                 offers={offers}
                 onCardTitleClick={onCardTitleClick}
+                onCardHover={onCardHover}
+                onCardMouseLeave={onCardMouseLeave}
                 classNamePrefix={`cities`}
               />
             </section>
@@ -73,6 +81,8 @@ const MainPage = (props) => {
                   offers={offers}
                   cityCoords={cityCoords}
                   cityZoom={cityZoom}
+                  detailedOffer={detailedOffer}
+                  activeCard={activeCard}
                 />
               </section>
             </div>
@@ -88,9 +98,15 @@ MainPage.propTypes = {
   onCardTitleClick: PropTypes.func.isRequired,
   activeLocation: PropTypes.shape(cityShape),
   onMenuClick: PropTypes.func.isRequired,
+  onSortingClick: PropTypes.func.isRequired,
+  activeSorting: PropTypes.string.isRequired,
   locations: PropTypes.arrayOf(PropTypes.shape(cityShape)).isRequired,
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
   cityZoom: PropTypes.number.isRequired,
+  onCardHover: PropTypes.func.isRequired,
+  onCardMouseLeave: PropTypes.func.isRequired,
+  activeCard: PropTypes.object,
+  detailedOffer: PropTypes.object
 };
 
 export default MainPage;

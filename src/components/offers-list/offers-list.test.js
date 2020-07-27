@@ -19,6 +19,8 @@ it(`Offers list renders ok`, () => {
           <OffersList
             offers={offers}
             onCardTitleClick={() => {}}
+            onCardHover={() => {}}
+            onCardMouseLeave={() => {}}
             classNamePrefix={`just-some-prefix-for-tests`}
           />
         </BrowserRouter>

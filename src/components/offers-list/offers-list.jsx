@@ -18,7 +18,14 @@ class OffersList extends React.PureComponent {
   }
 
   render() {
-    const {offers, onCardTitleClick, classNamePrefix} = this.props;
+    const {
+      offers,
+      onCardTitleClick,
+      onCardHover,
+      onCardMouseLeave,
+      classNamePrefix
+    } = this.props;
+
     const getClass = (prefix) => prefix ? `places__list ` + prefix + `__list` : `places__list`;
 
     return (
@@ -27,7 +34,8 @@ class OffersList extends React.PureComponent {
           <OfferCard
             key={offer + id}
             onCardTitleClick={onCardTitleClick}
-            onCardHover={this._setActiveCard}
+            onCardHover={onCardHover}
+            onMouseLeave={onCardMouseLeave}
             offer={offer}
             classNamePrefix={classNamePrefix}
           />
@@ -41,7 +49,9 @@ OffersList.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.object).isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   classNamePrefix: PropTypes.string.isRequired,
-  offersMaxAmount: PropTypes.number
+  offersMaxAmount: PropTypes.number,
+  onCardHover: PropTypes.func.isRequired,
+  onCardMouseLeave: PropTypes.func.isRequired
 };
 
 export default OffersList;

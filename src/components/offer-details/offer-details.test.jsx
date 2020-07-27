@@ -41,8 +41,9 @@ it(`Property page renders correctly`, () => {
             offer={offer}
             nearbyOffers={[offer]}
             comments={comments}
-            onCardTitleClick={() => {
-            }}
+            onCardTitleClick={() => {}}
+            onCardHover={() => {}}
+            onCardMouseLeave={() => {}}
             cityCoords={[0, 2]}
             cityZoom={1}
           />
