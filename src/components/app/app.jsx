@@ -77,7 +77,7 @@ const filterOffers = (offers, location) => {
   return offers.filter((offer) => offer.city.name === location);
 };
 
-// TOASK: правильно ли вообще так делать? (см. стр. 84-86)
+// TODO: нужно ли написать селектор
 const mapStateToProps = (state) => ({
   offers: filterOffers(state.offers, state.city.name),
   city: state.city,

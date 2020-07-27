@@ -21,8 +21,7 @@ class Map extends React.PureComponent {
     this.activeIcon = null;
   }
 
-  _initMarker(offer, icon) {
-    const {latitude, longitude} = offer.location;
+  _initMarker({location: {latitude, longitude}}, icon) {
     return leaflet.marker([latitude, longitude], {icon});
   }
 

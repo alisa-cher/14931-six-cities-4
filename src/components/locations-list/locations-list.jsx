@@ -20,8 +20,8 @@ class LocationsList extends React.PureComponent {
       <div className="tabs">
         <section className="locations container">
           <ul className="locations__list tabs__list">
-            {locations.map((location, id) =>
-              <li className="locations__item" key={location.name + id}>
+            {locations.map((location, index) =>
+              <li className="locations__item" key={location.name + index}>
                 <a onClick={() => this._onItemClick(location)}
                   className={(location.name === activeLocation.name) ? `tabs__item--active locations__item-link tabs__item` : `locations__item-link tabs__item`}>
                   <span>{location.name}</span>
@@ -37,8 +37,7 @@ class LocationsList extends React.PureComponent {
 
 LocationsList.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.shape(cityShape)),
-  // TODO: возможно, тут тоже надо такое припилить activeLocation: PropTypes.shape(cityShape),
-  activeLocation: PropTypes.object,
+  activeLocation: PropTypes.shape(cityShape),
   onMenuClick: PropTypes.func.isRequired,
 };
 
