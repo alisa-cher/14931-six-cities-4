@@ -21,17 +21,22 @@ class Map extends React.PureComponent {
     this.activeIcon = null;
   }
 
-  _initMarker(offer, icon) {
-    const {latitude, longitude} = offer.location;
+  _initMarker({location: {latitude, longitude}}, icon) {
     return leaflet.marker([latitude, longitude], {icon});
   }
 
-  _setMarkers(offers, icon, activeOffer, activeIcon) {
+  _setMarkers(offers, icon, detailedOffer, activeIcon, hoveredCard) {
     offers.forEach((offer) => {
       this._markers.push(this._initMarker(offer, icon));
     });
-    if (activeOffer) {
-      this._markers.push(this._initMarker(activeOffer, activeIcon));
+    if (detailedOffer && hoveredCard) {
+      this._markers.push(this._initMarker(hoveredCard, activeIcon));
+    }
+    if (hoveredCard && !detailedOffer) {
+      this._markers.push(this._initMarker(hoveredCard, activeIcon));
+    }
+    if (detailedOffer && !hoveredCard) {
+      this._markers.push(this._initMarker(detailedOffer, activeIcon));
     }
   }
 
@@ -57,10 +62,10 @@ class Map extends React.PureComponent {
     });
   }
 
-  _setMap(cityCoords, cityZoom, offers, activeOffer) {
+  _setMap(cityCoords, cityZoom, offers, detailedOffer, hoveredCard) {
     this.map.setView(cityCoords, cityZoom);
     this._setMapBackground(this.map);
-    this._setMarkers(offers, this.icon, activeOffer, this.activeIcon);
+    this._setMarkers(offers, this.icon, detailedOffer, this.activeIcon, hoveredCard);
     this.markersLayer = leaflet.layerGroup(this._markers).addTo(this.map);
   }
 
@@ -73,7 +78,8 @@ class Map extends React.PureComponent {
   componentDidMount() {
     const {
       offers,
-      activeOffer,
+      detailedOffer,
+      activeCard,
       cityCoords,
       cityZoom
     } = this.props;
@@ -81,19 +87,20 @@ class Map extends React.PureComponent {
     this.icon = this._initIcon(mapSettings.ICON_BASIC);
     this.activeIcon = this._initIcon(mapSettings.ICON_ACTIVE);
     this.map = this._initMap(cityCoords, cityZoom);
-    this._setMap(cityCoords, cityZoom, offers, activeOffer);
+    this._setMap(cityCoords, cityZoom, offers, detailedOffer, activeCard);
   }
 
   componentDidUpdate() {
     const {
       offers,
-      activeOffer,
+      detailedOffer,
+      activeCard,
       cityCoords,
       cityZoom
     } = this.props;
 
     this.markersLayer.clearLayers();
-    this._setMap(cityCoords, cityZoom, offers, activeOffer);
+    this._setMap(cityCoords, cityZoom, offers, detailedOffer, activeCard);
   }
 }
 
@@ -104,10 +111,11 @@ const coordinate = {
 
 Map.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.shape({location: PropTypes.shape(coordinate)})).isRequired,
-  // TODO: потом более подробно провалидировать - не будет ли при клике на пин рендериться новая детальная карточка
   activeOffer: PropTypes.object,
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
   cityZoom: PropTypes.number.isRequired,
+  activeCard: PropTypes.object,
+  detailedOffer: PropTypes.object
 };
 
 export default Map;

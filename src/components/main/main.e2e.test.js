@@ -23,7 +23,7 @@ const locations = [{
   name: `Paris`
 }];
 
-// TOASK: этот тест вообще, наверное, тут не нужен. Его лучше перенести в карточку отеля.
+// TODO: перенести потом этот тест в карточку отеля.
 it(`Card title is clicked`, () => {
   const clickHandler = jest.fn();
 
@@ -36,7 +36,11 @@ it(`Card title is clicked`, () => {
           cityCoords={[0, 2]}
           cityZoom={1}
           onCardTitleClick={clickHandler}
-          onMenuClick={() => {}}/>
+          onCardHover={() => {}}
+          onCardMouseLeave={() => {}}
+          onSortingClick={() => {}}
+          onMenuClick={() => {}}
+          activeSorting={`to-high`}/>
       </BrowserRouter>
   );
   const cardTitle = mainPage.find(`.place-card__name`);

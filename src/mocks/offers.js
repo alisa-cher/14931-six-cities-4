@@ -17,6 +17,36 @@ export const offers = [
       name: `Angelina`
     },
     location: {
+      latitude: 50.842577,
+      longitude: 4.3636969999999995,
+    },
+    city: {
+      location: {
+        latitude: 50.85045,
+        longitude: 4.34878,
+        zoom: 12
+      },
+      name: `Brussels`
+    },
+  },
+  {
+    bedrooms: 3,
+    description: `An independent House`,
+    maxAdults: 4,
+    type: `appartement`,
+    price: 110,
+    title: `just amazing1`,
+    isPremium: true,
+    rating: 4.7,
+    previewPhoto: `img/apartment-01.jpg`,
+    photos: [`img/room.jpg`, `img/studio-01.jpg`],
+    goods: [`Heating`, `Kitchen`, `Cable TV`, `Washing machine`, `Coffee machine`, `Dishwasher`],
+    host: {
+      avatar: `img/avatar.svg`,
+      isPro: true,
+      name: `Angelina`
+    },
+    location: {
       latitude: 50.842557,
       longitude: 4.3536969999999995,
     },

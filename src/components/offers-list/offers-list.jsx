@@ -2,46 +2,38 @@ import React from "react";
 import PropTypes from "prop-types";
 import OfferCard from "../offer-card/offer-card.jsx";
 
-class OffersList extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeCard: null
-    };
-    this._setActiveCard = this._setActiveCard.bind(this);
-  }
+const OffersList = (props) => {
+  const {
+    offers,
+    onCardTitleClick,
+    onCardHover,
+    onCardMouseLeave,
+    classNamePrefix
+  } = props;
 
-  _setActiveCard(card) {
-    this.setState(() => {
-      return {activeCard: card};
-    });
-  }
+  const getClass = (prefix) => prefix ? `places__list ` + prefix + `__list` : `places__list`;
 
-  render() {
-    const {offers, onCardTitleClick, classNamePrefix} = this.props;
-    const getClass = (prefix) => prefix ? `places__list ` + prefix + `__list` : `places__list`;
-
-    return (
-      <div className={getClass(classNamePrefix)}>
-        {offers.map((offer, id) =>
-          <OfferCard
-            key={offer + id}
-            onCardTitleClick={onCardTitleClick}
-            onCardHover={this._setActiveCard}
-            offer={offer}
-            classNamePrefix={classNamePrefix}
-          />
-        )}
-      </div>
-    );
-  }
-}
+  return (<div className={getClass(classNamePrefix)}>
+    {offers.map((offer, id) =>
+      <OfferCard
+        key={offer + id}
+        onCardTitleClick={onCardTitleClick}
+        onCardHover={onCardHover}
+        onMouseLeave={onCardMouseLeave}
+        offer={offer}
+        classNamePrefix={classNamePrefix}
+      />
+    )}
+  </div>);
+};
 
 OffersList.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.object).isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   classNamePrefix: PropTypes.string.isRequired,
-  offersMaxAmount: PropTypes.number
+  offersMaxAmount: PropTypes.number,
+  onCardHover: PropTypes.func.isRequired,
+  onCardMouseLeave: PropTypes.func.isRequired
 };
 
 export default OffersList;

@@ -42,7 +42,11 @@ it(`Main page renders correctly`, () => {
             cityCoords={[0, 2]}
             cityZoom={1}
             onCardTitleClick={() => {}}
-            onMenuClick={() => {}}/>
+            onMenuClick={() => {}}
+            onSortingClick={() => {}}
+            onCardHover={() => {}}
+            onCardMouseLeave={() => {}}
+            activeSorting={`top-rated` }/>
         </BrowserRouter>
     )
     .toJSON();

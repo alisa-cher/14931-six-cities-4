@@ -4,6 +4,7 @@ exports[`Offer card renders ok 1`] = `
 <article
   className="place-card just-some-prefix-for-tests__card"
   onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
 >
   <div
     className="place-card__mark"

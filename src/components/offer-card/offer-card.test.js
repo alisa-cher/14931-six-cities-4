@@ -19,6 +19,7 @@ it(`Offer card renders ok`, () => {
           <OfferCard
             onCardTitleClick={() => {}}
             onCardHover={() => {}}
+            onMouseLeave={() => {}}
             offer={offer}
             classNamePrefix={`just-some-prefix-for-tests`}
           />

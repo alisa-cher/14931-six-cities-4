@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import OffersList from "../offers-list/offers-list.jsx";
+import SortingOptions from "../sorting-options/sorting-options.jsx";
 import Map from "../map/map.jsx";
 import LocationsList from "../locations-list/locations-list.jsx";
 import {cityShape} from "../../types.js";
@@ -9,11 +10,17 @@ const MainPage = (props) => {
   const {
     offers,
     locations,
+    activeSorting,
     cityCoords,
     cityZoom,
     activeLocation,
     onCardTitleClick,
-    onMenuClick
+    onCardHover,
+    onCardMouseLeave,
+    onMenuClick,
+    onSortingClick,
+    activeCard,
+    detailedOffer,
   } = props;
 
   const numberOfOffers = offers.length;
@@ -56,32 +63,15 @@ const MainPage = (props) => {
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{numberOfOffers} places to stay in {activeLocationName}</b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex="0">
-                  Popular
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use xlinkHref="#icon-arrow-select"/>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom places__options--opened">
-                  <li className="places__option places__option--active" tabIndex="0">Popular</li>
-                  <li className="places__option" tabIndex="0">Price: low to high</li>
-                  <li className="places__option" tabIndex="0">Price: high to low</li>
-                  <li className="places__option" tabIndex="0">Top rated first</li>
-                </ul>
-                {/* // <!--*/}
-                {/* // <select class="places__sorting-type" id="places-sorting">*/}
-                {/* //   <option class="places__option" value="popular" selected="">Popular</option>*/}
-                {/* //   <option class="places__option" value="to-high">Price: low to high</option>*/}
-                {/* //   <option class="places__option" value="to-low">Price: high to low</option>*/}
-                {/* //   <option class="places__option" value="top-rated">Top rated first</option>*/}
-                {/* // </select>*/}
-                {/* // -->*/}
-              </form>
+              <SortingOptions
+                onSortingClick={onSortingClick}
+                activeSorting={activeSorting}
+              />
               <OffersList
                 offers={offers}
                 onCardTitleClick={onCardTitleClick}
+                onCardHover={onCardHover}
+                onCardMouseLeave={onCardMouseLeave}
                 classNamePrefix={`cities`}
               />
             </section>
@@ -91,6 +81,8 @@ const MainPage = (props) => {
                   offers={offers}
                   cityCoords={cityCoords}
                   cityZoom={cityZoom}
+                  detailedOffer={detailedOffer}
+                  activeCard={activeCard}
                 />
               </section>
             </div>
@@ -106,9 +98,15 @@ MainPage.propTypes = {
   onCardTitleClick: PropTypes.func.isRequired,
   activeLocation: PropTypes.shape(cityShape),
   onMenuClick: PropTypes.func.isRequired,
+  onSortingClick: PropTypes.func.isRequired,
+  activeSorting: PropTypes.string.isRequired,
   locations: PropTypes.arrayOf(PropTypes.shape(cityShape)).isRequired,
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
   cityZoom: PropTypes.number.isRequired,
+  onCardHover: PropTypes.func.isRequired,
+  onCardMouseLeave: PropTypes.func.isRequired,
+  activeCard: PropTypes.object,
+  detailedOffer: PropTypes.object
 };
 
 export default MainPage;

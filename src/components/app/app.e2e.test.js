@@ -46,7 +46,8 @@ const offers = [mockedOffer, Object.assign({}, mockedOffer, {price: 200})];
 it(`App state changes on offer card click`, () => {
   const store = mockStore({
     city: mockedCity,
-    offers
+    offers,
+    activeSorting: `popular`
   });
 
   const app = mount(
@@ -58,6 +59,8 @@ it(`App state changes on offer card click`, () => {
           cityCoords={[mockedCity.latitude, mockedCity.longitude]}
           offers={offers}
           onMenuClick={() => {}}
+          onSortingClick={() => {}}
+          activeSorting={`popular`}
         />
       </Provider>, {
         createNodeMock: () => {
