@@ -8,16 +8,21 @@ import MainPage from "../main/main.jsx";
 import OfferDetails from "../offer-details/offer-details.jsx";
 import comments from "../../mocks/comments";
 
+import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
+
+const MainPageWrapped = withActiveItem(MainPage);
+const OfferDetailsWrapped = withActiveItem(OfferDetails);
+
 class App extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      detailedOffer: null,
+      detailedOffer: null
     };
-    this._setActiveCard = this._setActiveCard.bind(this);
+    this._setDetailedOffer = this._setDetailedOffer.bind(this);
   }
 
-  _setActiveCard(card) {
+  _setDetailedOffer(card) {
     this.setState(() => {
       return {detailedOffer: card};
     });
@@ -29,6 +34,8 @@ class App extends React.PureComponent {
     const {
       offers,
       onMenuClick,
+      onSortingClick,
+      activeSorting,
       locations,
       city,
       cityCoords,
@@ -38,22 +45,25 @@ class App extends React.PureComponent {
     return <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <MainPage
+          <MainPageWrapped
             offers={offers}
-            onCardTitleClick={this._setActiveCard}
+            onCardTitleClick={this._setDetailedOffer}
             locations={locations}
             activeLocation={city}
+            activeOffer={detailedOffer}
             onMenuClick={onMenuClick}
+            onSortingClick={onSortingClick}
+            activeSorting={activeSorting}
             cityCoords={cityCoords}
             cityZoom={cityZoom}
           />
         </Route>
         <Route exact path="/property">
-          {detailedOffer && <OfferDetails
+          {detailedOffer && <OfferDetailsWrapped
             offer={detailedOffer}
             nearbyOffers={offers}
             comments={comments}
-            onCardTitleClick={this._setActiveCard}
+            onCardTitleClick={this._setDetailedOffer}
             cityCoords={cityCoords}
             cityZoom={cityZoom}/>
           }
@@ -70,25 +80,54 @@ App.propTypes = {
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
   cityZoom: PropTypes.number.isRequired,
   onMenuClick: PropTypes.func.isRequired,
+  onSortingClick: PropTypes.func.isRequired,
+  activeSorting: PropTypes.string.isRequired,
 };
 
-// TODO: куда-то вынести эту функцию
+// TODO: вынести потом отдельно эти функции
 const filterOffers = (offers, location) => {
   return offers.filter((offer) => offer.city.name === location);
 };
 
-// TOASK: правильно ли вообще так делать? (см. стр. 84-86)
+const sortOffers = (offers, activeSort) => {
+  switch (activeSort) {
+    case `to-high`:
+      return offers.slice().sort((a, b) => (a.price > b.price) ? 1 : -1);
+    case `to-low`:
+      return offers.slice().sort((a, b) => (a.price < b.price) ? 1 : -1);
+    case `top-rated`:
+      return offers.slice().sort((a, b) => (a.rating < b.rating) ? 1 : -1);
+    default:
+      return offers;
+  }
+};
+
+const getCities = (offers) => {
+  const cities = [];
+  const findElement = (property) => cities.some((el) => el.name === property);
+  offers.map((offer) => {
+    if (!findElement(offer.city.name)) {
+      cities.push(offer.city);
+    }
+  });
+  return cities;
+};
+
 const mapStateToProps = (state) => ({
-  offers: filterOffers(state.offers, state.city.name),
+  offers: sortOffers(filterOffers(state.offers, state.city.name), state.sorting),
   city: state.city,
+  activeSorting: state.sorting,
   cityCoords: [state.city.location.latitude, state.city.location.longitude],
   cityZoom: state.city.location.zoom,
-  locations: state.offers.map((offer) => offer.city)
+  locations: getCities(state.offers)
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onMenuClick(location) {
     dispatch(ActionCreator.setActiveLocation(location));
+  },
+  onSortingClick(option) {
+    dispatch(ActionCreator.setActiveSorting(option));
   }
 });
 

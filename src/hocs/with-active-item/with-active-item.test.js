@@ -2,9 +2,9 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import withActiveItem from "./with-active-item";
 
-it(`Comment renders correctly`, () => {
-  const element = `div`;
-  const NewComponent = withActiveItem(element);
+it(`Should render WithActiveItem component`, () => {
+  const MockComponent = () => <div />;
+  const NewComponent = withActiveItem(MockComponent);
 
   const tree = renderer
     .create(

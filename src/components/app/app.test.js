@@ -7,8 +7,6 @@ import configureStore from "redux-mock-store";
 jest.mock(`../map/map`, () => jest.fn().mockReturnValue(null));
 const mockStore = configureStore([]);
 
-// TOASK: непонятно, как тестировать компонент, обернутый в коннект
-
 const mockedCity = {
   location: {
     latitude: 2,
@@ -60,6 +58,8 @@ it(`App renders correctly`, () => {
             cityCoords={[mockedCity.latitude, mockedCity.longitude]}
             offers={offers}
             onMenuClick={() => {}}
+            activeSorting={`popular`}
+            onSortingClick={() => {}}
           />
         </Provider>, {
           createNodeMock: () => {

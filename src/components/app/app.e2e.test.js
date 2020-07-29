@@ -58,6 +58,9 @@ it(`App state changes on offer card click`, () => {
           cityCoords={[mockedCity.latitude, mockedCity.longitude]}
           offers={offers}
           onMenuClick={() => {}}
+          activeSorting={`popular`}
+          onSortingClick={() => {}
+          }
         />
       </Provider>, {
         createNodeMock: () => {
