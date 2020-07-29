@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Comment renders correctly 1`] = `
+<div
+  activeCard={null}
+  onCardHover={[Function]}
+  onCardMouseLeave={[Function]}
+/>
+`;
