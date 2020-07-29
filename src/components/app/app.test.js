@@ -45,8 +45,7 @@ const offers = [mockedOffer, mockedOffer];
 it(`App renders correctly`, () => {
   const store = mockStore({
     city: mockedCity,
-    offers,
-    activeSorting: `popular`,
+    offers
   });
 
   const tree = renderer
@@ -59,8 +58,6 @@ it(`App renders correctly`, () => {
             cityCoords={[mockedCity.latitude, mockedCity.longitude]}
             offers={offers}
             onMenuClick={() => {}}
-            onSortingClick={() => {}}
-            activeSorting={`popular`}
           />
         </Provider>, {
           createNodeMock: () => {
