@@ -46,7 +46,7 @@ it(`App renders correctly`, () => {
   const store = mockStore({
     city: mockedCity,
     offers,
-    activeSorting: `popular`,
+    activeSorting: `popular`
   });
 
   const tree = renderer

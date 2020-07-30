@@ -8,16 +8,18 @@ import MainPage from "../main/main.jsx";
 import OfferDetails from "../offer-details/offer-details.jsx";
 import comments from "../../mocks/comments";
 
+import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
+
+const MainPageWrapped = withActiveItem(MainPage);
+const OfferDetailsWrapped = withActiveItem(OfferDetails);
+
 class App extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      detailedOffer: null,
-      activeCard: null,
+      detailedOffer: null
     };
     this._setDetailedOffer = this._setDetailedOffer.bind(this);
-    this._setActiveCard = this._setActiveCard.bind(this);
-    this._resetActiveCard = this._resetActiveCard.bind(this);
   }
 
   _setDetailedOffer(card) {
@@ -26,21 +28,8 @@ class App extends React.PureComponent {
     });
   }
 
-  _setActiveCard(card) {
-    this.setState(() => {
-      return {activeCard: card};
-    });
-  }
-
-  _resetActiveCard() {
-    this.setState(() => {
-      return {activeCard: null};
-    });
-  }
-
   render() {
     const detailedOffer = this.state.detailedOffer;
-    const activeCard = this.state.activeCard;
 
     const {
       offers,
@@ -56,15 +45,12 @@ class App extends React.PureComponent {
     return <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <MainPage
+          <MainPageWrapped
             offers={offers}
             onCardTitleClick={this._setDetailedOffer}
-            onCardHover={this._setActiveCard}
-            onCardMouseLeave={this._resetActiveCard}
             locations={locations}
             activeLocation={city}
             activeOffer={detailedOffer}
-            activeCard={activeCard}
             onMenuClick={onMenuClick}
             onSortingClick={onSortingClick}
             activeSorting={activeSorting}
@@ -73,14 +59,11 @@ class App extends React.PureComponent {
           />
         </Route>
         <Route exact path="/property">
-          {detailedOffer && <OfferDetails
+          {detailedOffer && <OfferDetailsWrapped
             offer={detailedOffer}
-            activeCard={activeCard}
             nearbyOffers={offers}
             comments={comments}
             onCardTitleClick={this._setDetailedOffer}
-            onCardHover={this._setActiveCard}
-            onCardMouseLeave={this._resetActiveCard}
             cityCoords={cityCoords}
             cityZoom={cityZoom}/>
           }
