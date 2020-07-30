@@ -1,4 +1,5 @@
 import {offers} from "./mocks/offers.js";
+import {mapHotels} from "./data/adapter.js";
 
 const cities = offers.map((offer) => offer.city);
 const defaultLocation = cities[0];
@@ -32,6 +33,18 @@ const ActionCreator = {
   }),
 };
 
+const Operation = {
+  getOffers: () => (dispatch, getState, api) => {
+    return api.get(`/hotels`)
+      .then((response) => {
+        const mappedData = mapHotels(response.data);
+        console.log(response.data, 'raw response');
+        console.log(mappedData, 'mapped response');
+        dispatch(ActionCreator.getOffers(mappedData));
+      });
+  },
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.CHANGE_CITY: return Object.assign({}, state, {
@@ -49,4 +62,4 @@ const reducer = (state = initialState, action) => {
 };
 
 
-export {reducer, ActionType, ActionCreator};
+export {reducer, ActionType, ActionCreator, Operation};
