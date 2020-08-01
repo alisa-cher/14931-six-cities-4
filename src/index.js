@@ -4,12 +4,15 @@ import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 import {createStore, applyMiddleware, compose} from "redux";
 import App from "./components/app/app.jsx";
-import {reducer, Operation as DataOperation} from "./reducer.js";
+import reducer from "./reducer/reducer.js";
+import {Operation as DataOperation} from "./reducer/data/data.js";
 import {createAPI} from "./data/api.js";
+import {mapHotels} from "./data/adapter.js";
+import {ActionCreator as AppActionCreator} from "./reducer/app/app.js";
+import {ActionCreator as ErrorActionCreator} from "./reducer/errors/errors";
 
 const api = createAPI();
 
-// Не передаем изначальное состояние, так как reducer берет его из соответствующего файла
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducer, composeEnhancers(
     applyMiddleware(thunk.withExtraArgument(api))
@@ -24,5 +27,10 @@ const init = () => {
   );
 };
 
-store.dispatch(DataOperation.getOffers());
-init();
+store.dispatch(DataOperation.loadOffers(mapHotels))
+  .then(() => {
+    const state = store.getState();
+    store.dispatch(AppActionCreator.setActiveLocation(state.data.offers[0].city));
+  })
+  .catch(() => store.dispatch(ErrorActionCreator.setError(true)))
+  .then(() => init());

@@ -1,9 +1,8 @@
-import {reducer} from "./reducer.js";
-import {ActionType} from "./reducer";
+import {reducer, ActionType} from "./app.js";
 
 const initialState = {
   city: {},
-  offers: [],
+  sorting: `popular`
 };
 
 const mockedCity = {
@@ -16,7 +15,7 @@ const mockedCity = {
 };
 
 it(`Reducer without additional parameters should return initial state`, () => {
-  expect(reducer(initialState, {})).toEqual(initialState);
+  expect(reducer(void 0, {})).toEqual(initialState);
 });
 
 it(`Reducer should change city`, () => {
@@ -25,16 +24,16 @@ it(`Reducer should change city`, () => {
     payload: mockedCity,
   })).toEqual({
     city: mockedCity,
-    offers: [],
+    sorting: `popular`
   });
 });
 
-it(`Reducer should change offers`, () => {
+it(`Reducer should change active sorting`, () => {
   expect(reducer(initialState, {
-    type: ActionType.GET_OFFERS,
-    payload: [{}, {}],
+    type: ActionType.CHANGE_SORTING,
+    payload: `some-string`,
   })).toEqual({
     city: {},
-    offers: [{}, {}],
+    sorting: `some-string`
   });
 });
