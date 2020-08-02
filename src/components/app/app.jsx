@@ -4,12 +4,15 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {connect} from "react-redux";
 import {ActionCreator} from "../../reducer/app/app.js";
 import MainPage from "../main/main.jsx";
+import AuthPage from "../authorisation/auth.jsx";
 import OfferDetails from "../offer-details/offer-details.jsx";
 import comments from "../../mocks/comments";
 import {getVisibleOffers, getCities} from "../../reducer/data/selectors";
 import {getCityCoords, getCityZoom, getActiveSorting, getCurrentCity} from "../../reducer/app/selectors";
+import {getAuthorisationStatus} from "../../reducer/user/selectors";
 
 import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
+import {AuthorizationStatus} from "../../reducer/user/user";
 
 const MainPageWrapped = withActiveItem(MainPage);
 const OfferDetailsWrapped = withActiveItem(OfferDetails);
@@ -41,12 +44,17 @@ class App extends React.PureComponent {
       locations,
       city,
       cityCoords,
-      cityZoom
+      cityZoom,
+      authStatus
     } = this.props;
 
     return <BrowserRouter>
       <Switch>
+        <Route exact path="/login">
+          <AuthPage/>
+        </Route>
         <Route exact path="/">
+          {authStatus === AuthorizationStatus.NO_AUTH && <AuthPage/>}
           {isServerError && <div> Placeholder for screen announcing an error to the user.</div>}
           {!isServerError && <MainPageWrapped
             offers={offers}
@@ -78,6 +86,7 @@ class App extends React.PureComponent {
 
 App.propTypes = {
   isServerError: PropTypes.bool,
+  authStatus: PropTypes.string.isRequired,
   offers: PropTypes.arrayOf(PropTypes.object),
   locations: PropTypes.arrayOf(PropTypes.object),
   city: PropTypes.object,
@@ -89,6 +98,7 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  authStatus: getAuthorisationStatus(state),
   isServerError: state.error.serverError,
   offers: state.error.serverError ? [] : getVisibleOffers(state),
   locations: state.error.serverError ? [] : getCities(state),

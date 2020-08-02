@@ -53,6 +53,7 @@ it(`App state changes on offer card click`, () => {
   const app = mount(
       <Provider store={store}>
         <App
+          authStatus={`NO_AUTH`}
           city={mockedOffer.city}
           cityZoom={12}
           locations={[mockedCity, mockedCity]}
