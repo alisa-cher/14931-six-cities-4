@@ -34,3 +34,14 @@ export const mapHotels = (offers) => {
     },
   }));
 };
+
+
+export const mapUser = (user) => {
+  return {
+    email: user.email,
+    avatarUrl: `https://4.react.pages.academy/six-cities` + user.avatar_url,
+    id: user.id,
+    isPro: user.is_pro,
+    name: user.name
+  };
+};

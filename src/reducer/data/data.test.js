@@ -21,7 +21,7 @@ it(`Reducer should update offers by loaded offers`, () => {
   });
 });
 
-describe(`Operation work correctly`, () => {
+describe(`Operation functions correctly`, () => {
   it(`Should make a correct API call to /hotels`, function () {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();

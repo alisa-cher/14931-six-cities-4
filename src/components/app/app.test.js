@@ -62,7 +62,7 @@ it(`App renders correctly`, () => {
             onMenuClick={() => {}}
             onSortingClick={() => {}}
             activeSorting={`popular`}
-          />
+            login={() => {}}/>
         </Provider>, {
           createNodeMock: () => {
             return {};

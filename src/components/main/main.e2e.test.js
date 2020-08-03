@@ -40,7 +40,8 @@ it(`Card title is clicked`, () => {
           onCardMouseLeave={() => {}}
           onSortingClick={() => {}}
           onMenuClick={() => {}}
-          activeSorting={`to-high`}/>
+          activeSorting={`to-high`}
+          isUserLoggedIn/>
       </BrowserRouter>
   );
   const cardTitle = mainPage.find(`.place-card__name`);

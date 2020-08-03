@@ -9,7 +9,8 @@ import OfferDetails from "../offer-details/offer-details.jsx";
 import comments from "../../mocks/comments";
 import {getVisibleOffers, getCities} from "../../reducer/data/selectors";
 import {getCityCoords, getCityZoom, getActiveSorting, getCurrentCity} from "../../reducer/app/selectors";
-import {getAuthorisationStatus} from "../../reducer/user/selectors";
+import {getAuthorisationStatus, getUserEmail, getUserPhoto} from "../../reducer/user/selectors";
+import {Operation as UserOperation} from "../../reducer/user/user";
 
 import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
 import {AuthorizationStatus} from "../../reducer/user/user";
@@ -32,11 +33,10 @@ class App extends React.PureComponent {
     });
   }
 
-  render() {
-    const detailedOffer = this.state.detailedOffer;
-
+  _renderMainPage(isUserLoggedIn, detailedOffer) {
     const {
-      isServerError,
+      userEmail,
+      userPhoto,
       offers,
       onMenuClick,
       onSortingClick,
@@ -44,40 +44,66 @@ class App extends React.PureComponent {
       locations,
       city,
       cityCoords,
-      cityZoom,
-      authStatus
+      cityZoom
     } = this.props;
+
+    return <MainPageWrapped
+      isUserLoggedIn={isUserLoggedIn}
+      userEmail={userEmail}
+      userPhoto={userPhoto}
+      offers={offers}
+      onCardTitleClick={this._setDetailedOffer}
+      locations={locations}
+      activeLocation={city}
+      activeOffer={detailedOffer}
+      onMenuClick={onMenuClick}
+      onSortingClick={onSortingClick}
+      activeSorting={activeSorting}
+      cityCoords={cityCoords}
+      cityZoom={cityZoom}
+    />;
+  }
+
+  _renderPropertyPage(isUserLoggedIn, detailedOffer) {
+    const {
+      offers,
+      cityCoords,
+      cityZoom
+    } = this.props;
+
+    return <OfferDetailsWrapped
+      isUserLoggedIn={isUserLoggedIn}
+      offer={detailedOffer}
+      nearbyOffers={offers}
+      comments={comments}
+      onCardTitleClick={this._setDetailedOffer}
+      cityCoords={cityCoords}
+      cityZoom={cityZoom}/>;
+  }
+
+  render() {
+    const detailedOffer = this.state.detailedOffer;
+
+    const {
+      login,
+      authStatus,
+      isServerError,
+    } = this.props;
+
+    const isUserLoggedIn = (authStatus === AuthorizationStatus.AUTH);
 
     return <BrowserRouter>
       <Switch>
         <Route exact path="/login">
-          <AuthPage/>
+          {!isUserLoggedIn && <AuthPage onSubmit={login}/>}
+          {isUserLoggedIn && !isServerError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
         </Route>
         <Route exact path="/">
-          {authStatus === AuthorizationStatus.NO_AUTH && <AuthPage/>}
           {isServerError && <div> Placeholder for screen announcing an error to the user.</div>}
-          {!isServerError && <MainPageWrapped
-            offers={offers}
-            onCardTitleClick={this._setDetailedOffer}
-            locations={locations}
-            activeLocation={city}
-            activeOffer={detailedOffer}
-            onMenuClick={onMenuClick}
-            onSortingClick={onSortingClick}
-            activeSorting={activeSorting}
-            cityCoords={cityCoords}
-            cityZoom={cityZoom}
-          />}
+          {!isServerError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
         </Route>
         <Route exact path="/property">
-          {detailedOffer && <OfferDetailsWrapped
-            offer={detailedOffer}
-            nearbyOffers={offers}
-            comments={comments}
-            onCardTitleClick={this._setDetailedOffer}
-            cityCoords={cityCoords}
-            cityZoom={cityZoom}/>
-          }
+          {detailedOffer && this._renderPropertyPage(isUserLoggedIn, detailedOffer)}
         </Route>
       </Switch>
     </BrowserRouter>;
@@ -85,8 +111,12 @@ class App extends React.PureComponent {
 }
 
 App.propTypes = {
-  isServerError: PropTypes.bool,
+  login: PropTypes.func.isRequired,
   authStatus: PropTypes.string.isRequired,
+  userEmail: PropTypes.string,
+  userPhoto: PropTypes.string,
+  isServerError: PropTypes.bool,
+  user: PropTypes.object,
   offers: PropTypes.arrayOf(PropTypes.object),
   locations: PropTypes.arrayOf(PropTypes.object),
   city: PropTypes.object,
@@ -99,6 +129,8 @@ App.propTypes = {
 
 const mapStateToProps = (state) => ({
   authStatus: getAuthorisationStatus(state),
+  userEmail: getUserEmail(state),
+  userPhoto: getUserPhoto(state),
   isServerError: state.error.serverError,
   offers: state.error.serverError ? [] : getVisibleOffers(state),
   locations: state.error.serverError ? [] : getCities(state),
@@ -109,6 +141,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  login(authData) {
+    dispatch(UserOperation.login(authData));
+  },
   onMenuClick(location) {
     dispatch(ActionCreator.setActiveLocation(location));
   },

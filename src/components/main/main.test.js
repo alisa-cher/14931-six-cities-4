@@ -46,7 +46,8 @@ it(`Main page renders correctly`, () => {
             onSortingClick={() => {}}
             onCardHover={() => {}}
             onCardMouseLeave={() => {}}
-            activeSorting={`top-rated` }/>
+            activeSorting={`top-rated` }
+            isUserLoggedIn/>
         </BrowserRouter>
     )
     .toJSON();
