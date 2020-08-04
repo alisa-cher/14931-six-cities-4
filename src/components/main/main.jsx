@@ -8,6 +8,9 @@ import {cityShape} from "../../types.js";
 
 const MainPage = (props) => {
   const {
+    isUserLoggedIn,
+    userEmail,
+    userPhoto,
     offers,
     locations,
     activeSorting,
@@ -41,8 +44,14 @@ const MainPage = (props) => {
                 <li className="header__nav-item user">
                   <a className="header__nav-link header__nav-link--profile" href="#">
                     <div className="header__avatar-wrapper user__avatar-wrapper">
+                      <img style={{borderRadius: 10 + `px`}}
+                        src={isUserLoggedIn ? userPhoto : `../img/avatar.svg`}
+                        alt="user avatar"
+                        width="81"
+                        height="41"/>
                     </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                    {isUserLoggedIn && <span className="header__user-name user__name">{userEmail}</span>}
+                    {!isUserLoggedIn && <span className="header__login">Sign in</span>}
                   </a>
                 </li>
               </ul>
@@ -94,6 +103,9 @@ const MainPage = (props) => {
 };
 
 MainPage.propTypes = {
+  isUserLoggedIn: PropTypes.bool.isRequired,
+  userEmail: PropTypes.string,
+  userPhoto: PropTypes.string,
   offers: PropTypes.arrayOf(PropTypes.object).isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   activeLocation: PropTypes.shape(cityShape),

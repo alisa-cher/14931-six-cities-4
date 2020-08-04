@@ -53,6 +53,7 @@ it(`App renders correctly`, () => {
     .create(
         <Provider store={store}>
           <App
+            authStatus={`NO_AUTH`}
             city={mockedOffer.city}
             cityZoom={12}
             locations={[mockedCity, mockedCity]}
@@ -61,7 +62,7 @@ it(`App renders correctly`, () => {
             onMenuClick={() => {}}
             onSortingClick={() => {}}
             activeSorting={`popular`}
-          />
+            login={() => {}}/>
         </Provider>, {
           createNodeMock: () => {
             return {};

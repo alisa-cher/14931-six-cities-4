@@ -43,11 +43,23 @@ exports[`App renders correctly 1`] = `
               >
                 <div
                   className="header__avatar-wrapper user__avatar-wrapper"
-                />
-                <span
-                  className="header__user-name user__name"
                 >
-                  Oliver.conner@gmail.com
+                  <img
+                    alt="user avatar"
+                    height="41"
+                    src="../img/avatar.svg"
+                    style={
+                      Object {
+                        "borderRadius": "10px",
+                      }
+                    }
+                    width="81"
+                  />
+                </div>
+                <span
+                  className="header__login"
+                >
+                  Sign in
                 </span>
               </a>
             </li>
