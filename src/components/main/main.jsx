@@ -18,11 +18,11 @@ const MainPage = (props) => {
     cityZoom,
     activeLocation,
     onCardTitleClick,
-    onCardHover,
-    onCardMouseLeave,
+    setActiveItem,
+    resetActiveItem,
     onMenuClick,
     onSortingClick,
-    activeCard,
+    activeItem,
     detailedOffer,
   } = props;
 
@@ -79,8 +79,8 @@ const MainPage = (props) => {
               <OffersList
                 offers={offers}
                 onCardTitleClick={onCardTitleClick}
-                onCardHover={onCardHover}
-                onCardMouseLeave={onCardMouseLeave}
+                onCardHover={setActiveItem}
+                onCardMouseLeave={resetActiveItem}
                 classNamePrefix={`cities`}
               />
             </section>
@@ -91,7 +91,7 @@ const MainPage = (props) => {
                   cityCoords={cityCoords}
                   cityZoom={cityZoom}
                   detailedOffer={detailedOffer}
-                  activeCard={activeCard}
+                  activeCard={activeItem}
                 />
               </section>
             </div>
@@ -115,9 +115,9 @@ MainPage.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.shape(cityShape)).isRequired,
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
   cityZoom: PropTypes.number.isRequired,
-  onCardHover: PropTypes.func.isRequired,
-  onCardMouseLeave: PropTypes.func.isRequired,
-  activeCard: PropTypes.object,
+  setActiveItem: PropTypes.func.isRequired,
+  resetActiveItem: PropTypes.func.isRequired,
+  activeItem: PropTypes.object,
   detailedOffer: PropTypes.object
 };
 

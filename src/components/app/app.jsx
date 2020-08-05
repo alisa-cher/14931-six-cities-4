@@ -11,6 +11,7 @@ import {getVisibleOffers, getCities} from "../../reducer/data/selectors";
 import {getCityCoords, getCityZoom, getActiveSorting, getCurrentCity} from "../../reducer/app/selectors";
 import {getAuthorisationStatus, getUserEmail, getUserPhoto} from "../../reducer/user/selectors";
 import {Operation as UserOperation} from "../../reducer/user/user";
+import {Operation as DataOperation} from "../../reducer/data/data";
 
 import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
 import {AuthorizationStatus} from "../../reducer/user/user";
@@ -68,11 +69,13 @@ class App extends React.PureComponent {
     const {
       offers,
       cityCoords,
-      cityZoom
+      cityZoom,
+      sendComment
     } = this.props;
 
     return <OfferDetailsWrapped
       isUserLoggedIn={isUserLoggedIn}
+      onSubmit={sendComment}
       offer={detailedOffer}
       nearbyOffers={offers}
       comments={comments}
@@ -87,7 +90,7 @@ class App extends React.PureComponent {
     const {
       login,
       authStatus,
-      isServerError,
+      isServerError
     } = this.props;
 
     const isUserLoggedIn = (authStatus === AuthorizationStatus.AUTH);
@@ -143,6 +146,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   login(authData) {
     dispatch(UserOperation.login(authData));
+  },
+  sendComment(data, onSend, onSuccess) {
+    dispatch(DataOperation.sendComment(data, onSend, onSuccess));
   },
   onMenuClick(location) {
     dispatch(ActionCreator.setActiveLocation(location));

@@ -5,32 +5,32 @@ const withActiveItem = (Component) => {
     constructor(props) {
       super(props);
       this.state = {
-        activeCard: null,
+        activeItem: null,
       };
-      this._setActiveCard = this._setActiveCard.bind(this);
-      this._resetActiveCard = this._resetActiveCard.bind(this);
+      this._setActiveItem = this._setActiveItem.bind(this);
+      this._resetActiveItem = this._resetActiveItem.bind(this);
     }
 
-    _setActiveCard(card) {
+    _setActiveItem(item) {
       this.setState(() => {
-        return {activeCard: card};
+        return {activeItem: item};
       });
     }
 
-    _resetActiveCard() {
+    _resetActiveItem() {
       this.setState(() => {
-        return {activeCard: null};
+        return {activeItem: null};
       });
     }
 
     render() {
-      const activeCard = this.state.activeCard;
+      const activeItem = this.state.activeItem;
 
       return <Component
         {...this.props}
-        onCardHover={this._setActiveCard}
-        onCardMouseLeave={this._resetActiveCard}
-        activeCard={activeCard}
+        setActiveItem={this._setActiveItem}
+        resetActiveItem={this._resetActiveItem}
+        activeItem={activeItem}
       />;
     }
   }

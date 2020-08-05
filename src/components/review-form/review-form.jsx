@@ -1,65 +1,157 @@
-import React from "react";
+import React, {createRef} from "react";
+import PropTypes from "prop-types";
+import {detailedOfferShape} from "../../types";
 
 class ReviewForm extends React.PureComponent {
-  // TODO: ставлен класс-компонент, т.к эта форма будет еще доделываться в 7.2
+  constructor(props) {
+    super(props);
+    this.inputRefs = [];
+    this.reviewRef = createRef();
+    this.clientEvaluations = [`perfect`, `good`, `not bad`, `badly`, `terribly`];
+
+    this._handleSubmit = this._handleSubmit.bind(this);
+    this._handleInputChange = this._handleInputChange.bind(this);
+    this._handleTextareaChange = this._handleTextareaChange.bind(this);
+    this._resetForm = this._resetForm.bind(this);
+    this._checkIfIsValid = this._checkIfIsValid.bind(this);
+  }
+
+  createRefs() {
+    this.clientEvaluations.forEach(() => {
+      this.inputRefs.push(createRef());
+    });
+    return this.inputRefs;
+  }
+
+  _resetForm() {
+    const {
+      resetActiveItem: unCheckCheckbox,
+      toggleItem: toggleSubmitButton
+    } = this.props;
+
+    toggleSubmitButton();
+    unCheckCheckbox();
+
+    this.reviewRef.current.value = ``;
+  }
+
+  _checkIfIsValid() {
+    const {
+      activeItem: checkedInput,
+      toggleItem: toggleSubmitButton
+    } = this.props;
+
+    // строгое сравнение с нулем, т.к у меня изначально значение этого поля в стейте ровно null
+    const inputIsChecked = checkedInput > 0 || checkedInput === 0;
+
+    // Проблема такая: если заполняешь сначала textarea, а потом кликаешь на рейтинг, то при первом клике
+    // сюда приходит по-прежнему null, а не выбранный инпут, и кнопка на форме не разблокировывается
+
+    if (this.reviewRef.current.value && inputIsChecked) {
+      toggleSubmitButton();
+    }
+  }
+
+  _handleInputChange(id) {
+    const {
+      setActiveItem: checkInput,
+    } = this.props;
+
+    checkInput(id);
+    this._checkIfIsValid();
+  }
+
+  _handleTextareaChange() {
+    this._checkIfIsValid();
+  }
+
+
+  _handleSubmit(evt) {
+    const {
+      onSubmit,
+      activeItem: checkedInput,
+      toggleItem: toggleSubmitButton,
+      detailedOffer
+    } = this.props;
+
+    const inputValue = this.inputRefs[checkedInput].current.value;
+
+    const {id} = detailedOffer;
+    const inputIsChecked = checkedInput > 0 || checkedInput === 0;
+    const noRating = 0;
+
+    const formData = {
+      comment: this.reviewRef.current.value,
+      rating: inputIsChecked ? inputValue : noRating,
+    };
+
+    evt.preventDefault();
+
+    onSubmit(formData, id, toggleSubmitButton, this._resetForm);
+  }
+
   render() {
+    const {
+      activeItem: checkedInput,
+      disabledItem: disabledButton,
+    } = this.props;
+
+    const inputs = this.createRefs();
+
     return (
-      <form className="reviews__form form" action="#" method="post">
+      <form className="reviews__form form" action="#" method="post" onSubmit={this._handleSubmit}>
         <label className="reviews__label form__label" htmlFor="review">Your review</label>
         <div className="reviews__rating-form form__rating">
-          <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars"
-            type="radio"/>
-          <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
-            <svg className="form__star-image" width="37" height="33">
-              <use xlinkHref="#icon-star"/>
-            </svg>
-          </label>
-
-          <input className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars"
-            type="radio"/>
-          <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
-            <svg className="form__star-image" width="37" height="33">
-              <use xlinkHref="#icon-star"/>
-            </svg>
-          </label>
-
-          <input className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars"
-            type="radio"/>
-          <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
-            <svg className="form__star-image" width="37" height="33">
-              <use xlinkHref="#icon-star"/>
-            </svg>
-          </label>
-
-          <input className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars"
-            type="radio"/>
-          <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
-            <svg className="form__star-image" width="37" height="33">
-              <use xlinkHref="#icon-star"/>
-            </svg>
-          </label>
-
-          <input className="form__rating-input visually-hidden" name="rating" value="1" id="1-star"
-            type="radio"/>
-          <label htmlFor="1-star" className="reviews__rating-label form__rating-label"
-            title="terribly">
-            <svg className="form__star-image" width="37" height="33">
-              <use xlinkHref="#icon-star"/>
-            </svg>
-          </label>
+          {this.clientEvaluations.map((rating, id) =>
+            <React.Fragment key={rating + id}>
+              <input ref={inputs[id]}
+                onChange={() => this._handleInputChange(id)}
+                checked={id === checkedInput}
+                className="form__rating-input visually-hidden"
+                name="rating"
+                value={this.clientEvaluations.length - id}
+                id={this.clientEvaluations.length - id + `-stars`}
+                type="radio"/>
+              <label
+                htmlFor={this.clientEvaluations.length - id + `-stars`}
+                className="reviews__rating-label form__rating-label"
+                title={rating}>
+                <svg className="form__star-image" width="37" height="33">
+                  <use xlinkHref="#icon-star"/>
+                </svg>
+              </label>
+            </React.Fragment>)
+          }
         </div>
-        <textarea className="reviews__textarea form__textarea" id="review" name="review"
-          placeholder="Tell how was your stay, what you like and what can be improved"/>
+        <textarea
+          ref={this.reviewRef}
+          onChange={this._handleTextareaChange}
+          className="reviews__textarea form__textarea" id="review" name="review"
+          placeholder="Tell how was your stay, what you like and what can be improved"
+          minLength="30" maxLength="500"
+        />
         <div className="reviews__button-wrapper">
           <p className="reviews__help">
             To submit review please make sure to set <span className="reviews__star">rating</span> and
             describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
           </p>
-          <button className="reviews__submit form__submit button" type="submit" disabled="">Submit</button>
+          <button className="reviews__submit form__submit button"
+            type="submit"
+            disabled={disabledButton}>Submit</button>
         </div>
       </form>
     );
   }
 }
+
+ReviewForm.propTypes = {
+  detailedOffer: PropTypes.shape(detailedOfferShape).isRequired,
+  setActiveItem: PropTypes.func,
+  activeItem: PropTypes.number,
+  disabledItem: PropTypes.bool,
+  toggleItem: PropTypes.func,
+  onSubmit: PropTypes.func,
+  resetActiveItem: PropTypes.func,
+};
 
 export default ReviewForm;
