@@ -1,6 +1,6 @@
 import React, {createRef} from "react";
 import PropTypes from "prop-types";
-import {detailedOfferShape} from "../../types";
+import ErrorMessage from "../error-message/error-message.jsx";
 
 const textarea = {
   MIN_LENGTH: 50,
@@ -52,8 +52,7 @@ class ReviewForm extends React.PureComponent {
 
     if (isTextIsValid && inputIsChecked) {
       disableSubmitButton(false);
-    }
-    if (!isTextIsValid || !inputIsChecked) {
+    } else {
       disableSubmitButton(true);
     }
   }
@@ -72,10 +71,13 @@ class ReviewForm extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const {activeItem} = this.props;
+    const {activeItem, isError} = this.props;
 
     if (activeItem !== prevProps.activeItem) {
       this._checkIfIsValid();
+    }
+    if (isError !== prevProps.isError) {
+      this._resetForm();
     }
   }
 
@@ -84,10 +86,9 @@ class ReviewForm extends React.PureComponent {
       onSubmit,
       activeItem: checkedInput,
       toggleItem: toggleSubmitButton,
-      detailedOffer
+      offerId
     } = this.props;
 
-    const {id} = detailedOffer;
     const inputValue = this.inputRefs[checkedInput].current.value;
 
     const formData = {
@@ -97,13 +98,14 @@ class ReviewForm extends React.PureComponent {
 
     evt.preventDefault();
 
-    onSubmit(formData, id, () => toggleSubmitButton(true), this._resetForm);
+    onSubmit(formData, offerId, () => toggleSubmitButton(true), this._resetForm);
   }
 
   render() {
     const {
       activeItem: checkedInput,
       disabledItem: disabledButton,
+      isError
     } = this.props;
 
     const inputs = this.createRefs();
@@ -149,13 +151,15 @@ class ReviewForm extends React.PureComponent {
             type="submit"
             disabled={disabledButton}>Submit</button>
         </div>
+        {isError && <ErrorMessage tag={`span`}/>}
       </form>
     );
   }
 }
 
 ReviewForm.propTypes = {
-  detailedOffer: PropTypes.shape(detailedOfferShape).isRequired,
+  isError: PropTypes.bool,
+  offerId: PropTypes.number.isRequired,
   setActiveItem: PropTypes.func,
   activeItem: PropTypes.number,
   disabledItem: PropTypes.bool,

@@ -71,7 +71,7 @@ class App extends React.PureComponent {
       cityCoords,
       cityZoom,
       sendComment,
-      isServerError
+      isSendReviewError
     } = this.props;
 
     return <OfferDetailsWrapped
@@ -83,7 +83,7 @@ class App extends React.PureComponent {
       onCardTitleClick={this._setDetailedOffer}
       cityCoords={cityCoords}
       cityZoom={cityZoom}
-      isError={isServerError}/>;
+      isSendReviewError={isSendReviewError}/>;
   }
 
   render() {
@@ -92,7 +92,7 @@ class App extends React.PureComponent {
     const {
       login,
       authStatus,
-      isServerError
+      isOffersLoadError
     } = this.props;
 
     const isUserLoggedIn = (authStatus === AuthorizationStatus.AUTH);
@@ -101,13 +101,13 @@ class App extends React.PureComponent {
       <Switch>
         <Route exact path="/login">
           {!isUserLoggedIn && <AuthPage onSubmit={login}/>}
-          {isUserLoggedIn && !isServerError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
+          {isUserLoggedIn && !isOffersLoadError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
         </Route>
         <Route exact path="/">
-          {isServerError && <div> Placeholder for screen announcing an error to the user.</div>}
-          {!isServerError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
+          {isOffersLoadError && <div> Placeholder for screen announcing an error to the user.</div>}
+          {!isOffersLoadError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
         </Route>
-        <Route exact path="/hotels/: hotel_id/">
+        <Route exact path="/property">
           {detailedOffer && this._renderPropertyPage(isUserLoggedIn, detailedOffer)}
         </Route>
       </Switch>
@@ -118,9 +118,11 @@ class App extends React.PureComponent {
 App.propTypes = {
   login: PropTypes.func.isRequired,
   authStatus: PropTypes.string.isRequired,
+  isSendReviewError: PropTypes.bool,
+  isOffersLoadError: PropTypes.bool,
+  sendComment: PropTypes.func.isRequired,
   userEmail: PropTypes.string,
   userPhoto: PropTypes.string,
-  isServerError: PropTypes.bool,
   user: PropTypes.object,
   offers: PropTypes.arrayOf(PropTypes.object),
   locations: PropTypes.arrayOf(PropTypes.object),
@@ -136,13 +138,14 @@ const mapStateToProps = (state) => ({
   authStatus: getAuthorisationStatus(state),
   userEmail: getUserEmail(state),
   userPhoto: getUserPhoto(state),
-  isServerError: state.error.serverError,
-  offers: state.error.serverError ? [] : getVisibleOffers(state),
-  locations: state.error.serverError ? [] : getCities(state),
-  city: state.error.serverError ? {} : getCurrentCity(state),
-  activeSorting: state.error.serverError ? `` : getActiveSorting(state),
-  cityCoords: state.error.serverError ? [] : getCityCoords(state),
-  cityZoom: state.error.serverError ? null : getCityZoom(state)
+  isOffersLoadError: state.error.offersLoadError,
+  isSendReviewError: state.error.postReviewError,
+  offers: state.error.offersLoadError ? [] : getVisibleOffers(state),
+  locations: state.error.offersLoadError ? [] : getCities(state),
+  city: state.error.offersLoadError ? {} : getCurrentCity(state),
+  activeSorting: state.error.offersLoadError ? `` : getActiveSorting(state),
+  cityCoords: state.error.offersLoadError ? [] : getCityCoords(state),
+  cityZoom: state.error.offersLoadError ? null : getCityZoom(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -46,7 +46,9 @@ it(`Property page renders correctly`, () => {
             onCardMouseLeave={() => {}}
             cityCoords={[0, 2]}
             cityZoom={1}
-          />
+            onSubmit={() => {}}
+            resetActiveItem={() => {}}
+            setActiveItem={() => {}}/>
         </BrowserRouter>
     )
     .toJSON();

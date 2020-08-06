@@ -13,6 +13,7 @@ const ReviewFormWrapped = withToggleItem(withActiveItem(ReviewForm));
 
 const OfferDetails = (props) => {
   const {
+    isSendReviewError,
     isUserLoggedIn,
     onSubmit,
     offer,
@@ -26,7 +27,7 @@ const OfferDetails = (props) => {
     cityZoom
   } = props;
 
-  const {title, description, rating, isPremium, photos, price, type, goods, host, bedrooms, maxAdults} = offer;
+  const {title, description, rating, isPremium, photos, price, type, goods, host, bedrooms, maxAdults, id} = offer;
   const {avatar, isPro, name} = host;
   const commentsLength = comments.length;
   const NEARBY_OFFERS_MAX_AMOUNT = 3;
@@ -138,7 +139,12 @@ const OfferDetails = (props) => {
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{commentsLength}</span></h2>
                 <CommentsList comments={sortedComments}/>
-                {isUserLoggedIn && <ReviewFormWrapped onSubmit={onSubmit} detailedOffer={offer}/>}
+                {isUserLoggedIn &&
+                  <ReviewFormWrapped
+                    onSubmit={onSubmit}
+                    offerId={id}
+                    isError={isSendReviewError}
+                  />}
               </section>
             </div>
           </div>
@@ -171,10 +177,12 @@ const OfferDetails = (props) => {
 
 OfferDetails.propTypes = {
   isUserLoggedIn: PropTypes.bool,
+  isSendReviewError: PropTypes.bool,
   offer: PropTypes.shape(detailedOfferShape).isRequired,
   activeItem: PropTypes.object,
   nearbyOffers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired,
   comments: PropTypes.array.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
   cityZoom: PropTypes.number.isRequired,

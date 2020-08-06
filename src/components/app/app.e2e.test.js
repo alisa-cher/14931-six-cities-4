@@ -62,7 +62,8 @@ it(`App state changes on offer card click`, () => {
           onMenuClick={() => {}}
           onSortingClick={() => {}}
           activeSorting={`popular`}
-          login={() => {}}/>
+          login={() => {}}
+          sendComment={() => {}}/>
       </Provider>, {
         createNodeMock: () => {
           return {};

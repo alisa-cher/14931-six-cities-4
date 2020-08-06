@@ -1,22 +1,32 @@
 const initialState = {
-  serverError: null
+  offersLoadError: null,
+  postReviewError: null,
 };
 
 const ActionType = {
-  SET_ERROR: `SET_ERROR`
+  SET_OFFERS_LOAD_ERROR: `SET_ERROR`,
+  SET_POST_REVIEW_ERROR: `SET_POST_REVIEW_ERROR`,
 };
 
 const ActionCreator = {
-  setError: (error) => ({
-    type: ActionType.SET_ERROR,
+  setOffersLoadError: (error) => ({
+    type: ActionType.SET_OFFERS_LOAD_ERROR,
+    payload: error
+  }),
+
+  setReviewPostError: (error) => ({
+    type: ActionType.SET_POST_REVIEW_ERROR,
     payload: error
   })
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.SET_ERROR: return Object.assign({}, state, {
-      serverError: action.payload
+    case ActionType.SET_OFFERS_LOAD_ERROR: return Object.assign({}, state, {
+      offersLoadError: action.payload
+    });
+    case ActionType.SET_POST_REVIEW_ERROR: return Object.assign({}, state, {
+      postReviewError: action.payload
     });
   }
 

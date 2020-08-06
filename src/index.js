@@ -40,5 +40,5 @@ store.dispatch(DataOperation.loadOffers(mapHotels))
     const state = store.getState();
     store.dispatch(AppActionCreator.setActiveLocation(state.data.offers[0].city));
   })
-  .catch(() => store.dispatch(ErrorActionCreator.setError(true)))
+  .catch(() => store.dispatch(ErrorActionCreator.setOffersLoadError(true)))
   .then(() => init());

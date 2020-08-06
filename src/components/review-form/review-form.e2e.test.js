@@ -7,7 +7,11 @@ it(`ReviewForm is submitted`, () => {
   const preventDefault = jest.fn();
 
   const reviewForm = mount(
-      <ReviewForm onSubmit={submitHandler} activeItem={2}/>
+      <ReviewForm
+        onSubmit={submitHandler}
+        offerId={2}
+        activeItem={2}
+      />
   );
 
   const reviewRef = reviewForm.instance().reviewRef;

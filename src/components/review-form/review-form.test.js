@@ -5,7 +5,11 @@ import ReviewForm from "./review-form.jsx";
 it(`Review form renders correctly`, () => {
   const tree = renderer
     .create(
-        <ReviewForm onSubmit={() => {}}/>
+        <ReviewForm
+          onSubmit={() => {}}
+          offerId={1}
+          isError={false}
+        />
     )
     .toJSON();
   expect(tree).toMatchSnapshot();

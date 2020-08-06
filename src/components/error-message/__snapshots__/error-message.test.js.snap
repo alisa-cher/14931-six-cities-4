@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Error message correctly 1`] = `
+<span
+  className="test"
+  style={
+    Object {
+      "color": "red",
+      "display": "block",
+      "paddingTop": "5px",
+    }
+  }
+>
+  Something went wrong. Please try again later.
+</span>
+`;

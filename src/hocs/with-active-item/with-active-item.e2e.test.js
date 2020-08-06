@@ -11,30 +11,30 @@ describe(`e2e tests for withActiveItem hoc`, () => {
 
     const state = wrapper.state();
 
-    expect(state.activeCard).toBe(null);
+    expect(state.activeItem).toBe(null);
   });
 
-  it(`Component state changes when called onCardHover`, () => {
-    const setActiveCardSpy = jest.spyOn(NewComponent.prototype, `_setActiveCard`);
+  it(`Component state changes when called onItemHover`, () => {
+    const setActiveItemSpy = jest.spyOn(NewComponent.prototype, `_setActiveItem`);
     const wrapper = shallow(<NewComponent/>);
 
-    wrapper.find(MockComponent).props().onCardHover({city: `test city`});
-    expect(setActiveCardSpy).toHaveBeenCalled();
+    wrapper.find(MockComponent).props().setActiveItem({city: `test city`});
+    expect(setActiveItemSpy).toHaveBeenCalled();
 
     const state = wrapper.state();
 
-    expect(state.activeCard).toStrictEqual({city: `test city`});
+    expect(state.activeItem).toStrictEqual({city: `test city`});
   });
 
-  it(`Component state changes when called onCardMouseLeave`, () => {
-    const resetActiveCardSpy = jest.spyOn(NewComponent.prototype, `_resetActiveCard`);
+  it(`Component state changes when called onItemMouseLeave`, () => {
+    const resetActiveItemSpy = jest.spyOn(NewComponent.prototype, `_resetActiveItem`);
     const wrapper = shallow(<NewComponent/>);
 
-    wrapper.find(MockComponent).props().onCardMouseLeave();
-    expect(resetActiveCardSpy).toHaveBeenCalled();
+    wrapper.find(MockComponent).props().resetActiveItem();
+    expect(resetActiveItemSpy).toHaveBeenCalled();
 
     const state = wrapper.state();
 
-    expect(state.activeCard).toBe(null);
+    expect(state.activeItem).toBe(null);
   });
 });

@@ -1,4 +1,3 @@
-import {AuthorizationStatus} from "../user/user";
 import {ActionCreator as ErrorActionCreator} from "../errors/errors";
 
 const initialState = {
@@ -45,17 +44,14 @@ const Operation = {
 
   sendComment: (data, offerId, onSend, onSuccess) => (dispatch, getState, api) => {
     onSend();
-    return api.post(`/comment/${offerId}`, data)
+    return api.post(`/comments/${offerId}`, data)
       .then(() => {
         onSuccess();
-        // dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
+        dispatch(ErrorActionCreator.setReviewPostError(false));
       })
       .catch((error) => {
-        dispatch(ErrorActionCreator.setError(true));
-        console.log(error.response.data);
-        console.log(error.response);
-        console.log(error.response.headers);
-        throw err;
+        dispatch(ErrorActionCreator.setReviewPostError(true));
+        throw error;
       });
   },
 };
