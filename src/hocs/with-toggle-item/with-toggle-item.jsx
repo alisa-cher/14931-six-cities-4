@@ -10,9 +10,9 @@ const withToggleItem = (Component) => {
       this._toggleItem = this._toggleItem.bind(this);
     }
 
-    _toggleItem() {
-      this.setState((previousState) => {
-        return {isDisabled: !previousState.isDisabled};
+    _toggleItem(bool) {
+      this.setState(() => {
+        return {isDisabled: bool};
       });
     }
 

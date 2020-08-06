@@ -2,6 +2,11 @@ import React, {createRef} from "react";
 import PropTypes from "prop-types";
 import {detailedOfferShape} from "../../types";
 
+const textarea = {
+  MIN_LENGTH: 50,
+  MAX_LENGTH: 300
+};
+
 class ReviewForm extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -11,9 +16,9 @@ class ReviewForm extends React.PureComponent {
 
     this._handleSubmit = this._handleSubmit.bind(this);
     this._handleInputChange = this._handleInputChange.bind(this);
-    this._handleTextareaChange = this._handleTextareaChange.bind(this);
     this._resetForm = this._resetForm.bind(this);
     this._checkIfIsValid = this._checkIfIsValid.bind(this);
+    this._handleTextareaChange = this._handleTextareaChange.bind(this);
   }
 
   createRefs() {
@@ -29,7 +34,7 @@ class ReviewForm extends React.PureComponent {
       toggleItem: toggleSubmitButton
     } = this.props;
 
-    toggleSubmitButton();
+    toggleSubmitButton(true);
     unCheckCheckbox();
 
     this.reviewRef.current.value = ``;
@@ -38,17 +43,18 @@ class ReviewForm extends React.PureComponent {
   _checkIfIsValid() {
     const {
       activeItem: checkedInput,
-      toggleItem: toggleSubmitButton
+      toggleItem: disableSubmitButton
     } = this.props;
 
-    // строгое сравнение с нулем, т.к у меня изначально значение этого поля в стейте ровно null
     const inputIsChecked = checkedInput > 0 || checkedInput === 0;
+    const textareaValue = this.reviewRef.current.value.length;
+    const isTextIsValid = textareaValue > textarea.MIN_LENGTH && textareaValue < textarea.MAX_LENGTH;
 
-    // Проблема такая: если заполняешь сначала textarea, а потом кликаешь на рейтинг, то при первом клике
-    // сюда приходит по-прежнему null, а не выбранный инпут, и кнопка на форме не разблокировывается
-
-    if (this.reviewRef.current.value && inputIsChecked) {
-      toggleSubmitButton();
+    if (isTextIsValid && inputIsChecked) {
+      disableSubmitButton(false);
+    }
+    if (!isTextIsValid || !inputIsChecked) {
+      disableSubmitButton(true);
     }
   }
 
@@ -65,6 +71,13 @@ class ReviewForm extends React.PureComponent {
     this._checkIfIsValid();
   }
 
+  componentDidUpdate(prevProps) {
+    const {activeItem} = this.props;
+
+    if (activeItem !== prevProps.activeItem) {
+      this._checkIfIsValid();
+    }
+  }
 
   _handleSubmit(evt) {
     const {
@@ -74,20 +87,17 @@ class ReviewForm extends React.PureComponent {
       detailedOffer
     } = this.props;
 
-    const inputValue = this.inputRefs[checkedInput].current.value;
-
     const {id} = detailedOffer;
-    const inputIsChecked = checkedInput > 0 || checkedInput === 0;
-    const noRating = 0;
+    const inputValue = this.inputRefs[checkedInput].current.value;
 
     const formData = {
       comment: this.reviewRef.current.value,
-      rating: inputIsChecked ? inputValue : noRating,
+      rating: inputValue
     };
 
     evt.preventDefault();
 
-    onSubmit(formData, id, toggleSubmitButton, this._resetForm);
+    onSubmit(formData, id, () => toggleSubmitButton(true), this._resetForm);
   }
 
   render() {

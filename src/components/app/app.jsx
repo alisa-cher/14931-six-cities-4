@@ -70,7 +70,8 @@ class App extends React.PureComponent {
       offers,
       cityCoords,
       cityZoom,
-      sendComment
+      sendComment,
+      isServerError
     } = this.props;
 
     return <OfferDetailsWrapped
@@ -81,7 +82,8 @@ class App extends React.PureComponent {
       comments={comments}
       onCardTitleClick={this._setDetailedOffer}
       cityCoords={cityCoords}
-      cityZoom={cityZoom}/>;
+      cityZoom={cityZoom}
+      isError={isServerError}/>;
   }
 
   render() {
@@ -105,7 +107,7 @@ class App extends React.PureComponent {
           {isServerError && <div> Placeholder for screen announcing an error to the user.</div>}
           {!isServerError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
         </Route>
-        <Route exact path="/property">
+        <Route exact path="/hotels/: hotel_id/">
           {detailedOffer && this._renderPropertyPage(isUserLoggedIn, detailedOffer)}
         </Route>
       </Switch>
@@ -147,8 +149,8 @@ const mapDispatchToProps = (dispatch) => ({
   login(authData) {
     dispatch(UserOperation.login(authData));
   },
-  sendComment(data, onSend, onSuccess) {
-    dispatch(DataOperation.sendComment(data, onSend, onSuccess));
+  sendComment(data, id, onSend, onSuccess) {
+    dispatch(DataOperation.sendComment(data, id, onSend, onSuccess));
   },
   onMenuClick(location) {
     dispatch(ActionCreator.setActiveLocation(location));
