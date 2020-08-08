@@ -15,7 +15,7 @@ export const mapHotels = (offers) => {
       longitude: offer.location.longitude,
       zoom: offer.location.zoom,
     },
-    rating: offer.number,
+    rating: offer.rating,
     photos: offer.images,
     goods: offer.goods,
     host: {

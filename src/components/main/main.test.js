@@ -44,8 +44,8 @@ it(`Main page renders correctly`, () => {
             onCardTitleClick={() => {}}
             onMenuClick={() => {}}
             onSortingClick={() => {}}
-            onCardHover={() => {}}
-            onCardMouseLeave={() => {}}
+            setActiveItem={() => {}}
+            resetActiveItem={() => {}}
             activeSorting={`top-rated` }
             isUserLoggedIn/>
         </BrowserRouter>

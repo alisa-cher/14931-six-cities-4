@@ -1,3 +1,5 @@
+import {ActionCreator as ErrorActionCreator} from "../errors/errors";
+
 const initialState = {
   offers: []
 };
@@ -29,6 +31,27 @@ const Operation = {
       .then((response) => {
         const mappedData = adapter(response.data);
         dispatch(ActionCreator.getOffers(mappedData));
+      });
+  },
+
+  loadComments: (adapter) => (dispatch, getState, api) => {
+    return api.get(`/hotels`)
+      .then((response) => {
+        const mappedData = adapter(response.data);
+        dispatch(ActionCreator.getOffers(mappedData));
+      });
+  },
+
+  sendComment: (data, offerId, onSend, onSuccess) => (dispatch, getState, api) => {
+    onSend();
+    return api.post(`/comments/${offerId}`, data)
+      .then(() => {
+        onSuccess();
+        dispatch(ErrorActionCreator.setReviewPostError(false));
+      })
+      .catch((error) => {
+        dispatch(ErrorActionCreator.setReviewPostError(true));
+        throw error;
       });
   },
 };

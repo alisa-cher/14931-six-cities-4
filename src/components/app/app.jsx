@@ -11,6 +11,7 @@ import {getVisibleOffers, getCities} from "../../reducer/data/selectors";
 import {getCityCoords, getCityZoom, getActiveSorting, getCurrentCity} from "../../reducer/app/selectors";
 import {getAuthorisationStatus, getUserEmail, getUserPhoto} from "../../reducer/user/selectors";
 import {Operation as UserOperation} from "../../reducer/user/user";
+import {Operation as DataOperation} from "../../reducer/data/data";
 
 import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
 import {AuthorizationStatus} from "../../reducer/user/user";
@@ -68,17 +69,21 @@ class App extends React.PureComponent {
     const {
       offers,
       cityCoords,
-      cityZoom
+      cityZoom,
+      sendComment,
+      isSendReviewError
     } = this.props;
 
     return <OfferDetailsWrapped
       isUserLoggedIn={isUserLoggedIn}
+      onSubmit={sendComment}
       offer={detailedOffer}
       nearbyOffers={offers}
       comments={comments}
       onCardTitleClick={this._setDetailedOffer}
       cityCoords={cityCoords}
-      cityZoom={cityZoom}/>;
+      cityZoom={cityZoom}
+      isSendReviewError={isSendReviewError}/>;
   }
 
   render() {
@@ -87,7 +92,7 @@ class App extends React.PureComponent {
     const {
       login,
       authStatus,
-      isServerError,
+      isOffersLoadError
     } = this.props;
 
     const isUserLoggedIn = (authStatus === AuthorizationStatus.AUTH);
@@ -96,11 +101,11 @@ class App extends React.PureComponent {
       <Switch>
         <Route exact path="/login">
           {!isUserLoggedIn && <AuthPage onSubmit={login}/>}
-          {isUserLoggedIn && !isServerError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
+          {isUserLoggedIn && !isOffersLoadError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
         </Route>
         <Route exact path="/">
-          {isServerError && <div> Placeholder for screen announcing an error to the user.</div>}
-          {!isServerError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
+          {isOffersLoadError && <div> Placeholder for screen announcing an error to the user.</div>}
+          {!isOffersLoadError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
         </Route>
         <Route exact path="/property">
           {detailedOffer && this._renderPropertyPage(isUserLoggedIn, detailedOffer)}
@@ -113,9 +118,11 @@ class App extends React.PureComponent {
 App.propTypes = {
   login: PropTypes.func.isRequired,
   authStatus: PropTypes.string.isRequired,
+  isSendReviewError: PropTypes.bool,
+  isOffersLoadError: PropTypes.bool,
+  sendComment: PropTypes.func.isRequired,
   userEmail: PropTypes.string,
   userPhoto: PropTypes.string,
-  isServerError: PropTypes.bool,
   user: PropTypes.object,
   offers: PropTypes.arrayOf(PropTypes.object),
   locations: PropTypes.arrayOf(PropTypes.object),
@@ -131,18 +138,22 @@ const mapStateToProps = (state) => ({
   authStatus: getAuthorisationStatus(state),
   userEmail: getUserEmail(state),
   userPhoto: getUserPhoto(state),
-  isServerError: state.error.serverError,
-  offers: state.error.serverError ? [] : getVisibleOffers(state),
-  locations: state.error.serverError ? [] : getCities(state),
-  city: state.error.serverError ? {} : getCurrentCity(state),
-  activeSorting: state.error.serverError ? `` : getActiveSorting(state),
-  cityCoords: state.error.serverError ? [] : getCityCoords(state),
-  cityZoom: state.error.serverError ? null : getCityZoom(state)
+  isOffersLoadError: state.error.offersLoadError,
+  isSendReviewError: state.error.postReviewError,
+  offers: state.error.offersLoadError ? [] : getVisibleOffers(state),
+  locations: state.error.offersLoadError ? [] : getCities(state),
+  city: state.error.offersLoadError ? {} : getCurrentCity(state),
+  activeSorting: state.error.offersLoadError ? `` : getActiveSorting(state),
+  cityCoords: state.error.offersLoadError ? [] : getCityCoords(state),
+  cityZoom: state.error.offersLoadError ? null : getCityZoom(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
   login(authData) {
     dispatch(UserOperation.login(authData));
+  },
+  sendComment(data, id, onSend, onSuccess) {
+    dispatch(DataOperation.sendComment(data, id, onSend, onSuccess));
   },
   onMenuClick(location) {
     dispatch(ActionCreator.setActiveLocation(location));

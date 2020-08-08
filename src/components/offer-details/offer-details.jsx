@@ -6,22 +6,28 @@ import ReviewForm from "../review-form/review-form.jsx";
 import Map from "../map/map.jsx";
 import {sliceAnArray} from "../../helpers.js";
 import {detailedOfferShape, offerShape} from "../../types.js";
+import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
+import withToggleItem from "../../hocs/with-toggle-item/with-toggle-item.jsx";
+
+const ReviewFormWrapped = withToggleItem(withActiveItem(ReviewForm));
 
 const OfferDetails = (props) => {
   const {
+    isSendReviewError,
     isUserLoggedIn,
+    onSubmit,
     offer,
-    activeCard,
+    activeItem,
     nearbyOffers,
     comments,
     onCardTitleClick,
-    onCardHover,
-    onCardMouseLeave,
+    setActiveItem,
+    resetActiveItem,
     cityCoords,
     cityZoom
   } = props;
 
-  const {title, description, rating, isPremium, photos, price, type, goods, host, bedrooms, maxAdults} = offer;
+  const {title, description, rating, isPremium, photos, price, type, goods, host, bedrooms, maxAdults, id} = offer;
   const {avatar, isPro, name} = host;
   const commentsLength = comments.length;
   const NEARBY_OFFERS_MAX_AMOUNT = 3;
@@ -133,7 +139,12 @@ const OfferDetails = (props) => {
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{commentsLength}</span></h2>
                 <CommentsList comments={sortedComments}/>
-                {isUserLoggedIn && <ReviewForm/>}
+                {isUserLoggedIn &&
+                  <ReviewFormWrapped
+                    onSubmit={onSubmit}
+                    offerId={id}
+                    isError={isSendReviewError}
+                  />}
               </section>
             </div>
           </div>
@@ -141,7 +152,7 @@ const OfferDetails = (props) => {
             <Map
               offers={offersToRender}
               detailedOffer={offer}
-              activeCard={activeCard}
+              activeCard={activeItem}
               cityCoords={cityCoords}
               cityZoom={cityZoom}
             />
@@ -153,8 +164,8 @@ const OfferDetails = (props) => {
             <OffersList
               offers={offersToRender}
               onCardTitleClick={onCardTitleClick}
-              onCardHover={onCardHover}
-              onCardMouseLeave={onCardMouseLeave}
+              onCardHover={setActiveItem}
+              onCardMouseLeave={resetActiveItem}
               classNamePrefix={`near-places`}
             />
           </section>
@@ -166,15 +177,17 @@ const OfferDetails = (props) => {
 
 OfferDetails.propTypes = {
   isUserLoggedIn: PropTypes.bool,
+  isSendReviewError: PropTypes.bool,
   offer: PropTypes.shape(detailedOfferShape).isRequired,
-  activeCard: PropTypes.object,
+  activeItem: PropTypes.object,
   nearbyOffers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired,
   comments: PropTypes.array.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
   cityZoom: PropTypes.number.isRequired,
-  onCardHover: PropTypes.func.isRequired,
-  onCardMouseLeave: PropTypes.func.isRequired
+  setActiveItem: PropTypes.func.isRequired,
+  resetActiveItem: PropTypes.func.isRequired
 };
 
 export default OfferDetails;
