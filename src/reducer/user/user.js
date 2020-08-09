@@ -1,7 +1,3 @@
-import {Operation as DataOperation} from "../data/data";
-import {mapHotels} from "../../data/adapter";
-import history from "../../history.js";
-
 const AuthorizationStatus = {
   AUTH: `AUTH`,
   NO_AUTH: `NO_AUTH`,
@@ -51,13 +47,12 @@ const Operation = {
   checkAuth: (adapter) => (dispatch, getState, api) => {
     return api.get(`/login`)
       .then((response) => {
+        dispatch(ActionCreator.setAuthStatus(AuthorizationStatus.AUTH));
         const mappedData = adapter(response.data);
         dispatch(ActionCreator.setUser(mappedData));
-        dispatch(DataOperation.getFavorites(mapHotels));
-        history.push(`/favorites`);
       })
-      .catch((err) => {
-        throw err;
+      .catch(() => {
+        dispatch(ActionCreator.setAuthStatus(AuthorizationStatus.NO_AUTH));
       });
   },
 

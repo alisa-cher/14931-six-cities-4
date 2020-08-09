@@ -232,15 +232,18 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   login(authData) {
     dispatch(UserOperation.login(authData))
-      .then(() => dispatch(UserOperation.checkAuth(mapUser)));
+      .then(() => dispatch(UserOperation.checkAuth(mapUser)))
+      .then(() => history.push(`/favorites`));
   },
   onCommentSend(data, id, onSend, onSuccess) {
     dispatch(DataOperation.sendComment(data, id, onSend, onSuccess))
       .then(() => dispatch(DataOperation.loadComments(id, mapComments)));
   },
   onFavoriteButtonClick(data, offerId, status) {
-    dispatch(DataOperation.changeFavoriteStatus(data, offerId, status))
-      .then(() => dispatch(DataOperation.getFavorites(mapHotels)));
+    dispatch(UserOperation.checkAuth(mapUser))
+      .then(() => dispatch(DataOperation.changeFavoriteStatus(data, offerId, status)))
+      .then(() => dispatch(DataOperation.getFavorites(mapHotels)))
+      .catch(() => history.push(`/login`));
   },
   onMenuClick(location) {
     dispatch(AppActionCreator.setActiveLocation(location));
