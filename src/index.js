@@ -1,21 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
-import thunk from "redux-thunk";
 import {createStore, applyMiddleware, compose} from "redux";
-import App from "./components/app/app.jsx";
+import thunk from "redux-thunk";
 import reducer from "./reducer/reducer.js";
 import {Operation as DataOperation} from "./reducer/data/data.js";
-import {Operation as UserOperation} from "./reducer/user/user";
 import {createAPI} from "./data/api.js";
-import {mapHotels, mapUser} from "./data/adapter.js";
-import {ActionCreator as AppActionCreator} from "./reducer/app/app.js";
-import {ActionCreator as ErrorActionCreator} from "./reducer/errors/errors";
-import {ActionCreator as DataActionCreator} from "./reducer/user/user";
-import {AuthorizationStatus} from "./reducer/user/user";
+import {mapHotels} from "./data/adapter.js";
+import App from "./components/app/app.jsx";
+import {ActionCreator, AuthorizationStatus, Operation as UserOperation} from "./reducer/user/user";
+import {mapUser} from "./data/adapter";
 
 const onUnauthorized = () => {
-  store.dispatch(DataActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH));
+  store.dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH));
 };
 
 const api = createAPI(onUnauthorized);
@@ -35,10 +32,4 @@ const init = () => {
 };
 
 store.dispatch(UserOperation.checkAuth(mapUser));
-store.dispatch(DataOperation.loadOffers(mapHotels))
-  .then(() => {
-    const state = store.getState();
-    store.dispatch(AppActionCreator.setActiveLocation(state.data.offers[0].city));
-  })
-  .catch(() => store.dispatch(ErrorActionCreator.setOffersLoadError(true)))
-  .then(() => init());
+store.dispatch(DataOperation.loadOffers(mapHotels)).then(() => init());

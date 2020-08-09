@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Rating from "../rating/rating.jsx";
 
 const Comment = (props) => {
   const {comment, tag: Tag} = props;
@@ -19,12 +20,11 @@ const Comment = (props) => {
         <span className="reviews__user-name">{userName}</span>
       </div>
       <div className="reviews__info">
-        <div className="reviews__rating rating">
-          <div className="reviews__stars rating__stars">
-            <span style={{width: (20 * rating) + `%`}}/>
-            <span className="visually-hidden">Rating</span>
-          </div>
-        </div>
+        <Rating
+          classNamePrefix={`reviews`}
+          rating={rating}
+          isInteger={true}
+        />
         <p className="reviews__text">
           {userComment}
         </p>

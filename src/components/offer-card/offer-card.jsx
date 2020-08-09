@@ -2,45 +2,56 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Link} from 'react-router-dom';
 import {offerShape} from "../../types.js";
+import {capitalize} from "../../helpers";
+import BookmarkButton from "../bookmark-button/bookmark-button.jsx";
+import Rating from "../rating/rating.jsx";
+import withToggleItem from "../../hocs/with-toggle-item/with-toggle-item.jsx";
 
 class OfferCard extends React.PureComponent {
   constructor(props) {
     super(props);
-    this._onCardHover = this._onCardHover.bind(this);
-    this._onCardClick = this._onCardClick.bind(this);
-    this._onMouseLeave = this._onMouseLeave.bind(this);
+    this._handleCardHover = this._handleCardHover.bind(this);
+    this._handleMouseLeave = this._handleMouseLeave.bind(this);
+    this._handleCardClick = this._handleCardClick.bind(this);
   }
 
-  _onCardHover() {
+  _handleCardHover() {
     const {onCardHover, offer} = this.props;
-    onCardHover(offer);
+    if (onCardHover) {
+      onCardHover(offer);
+    }
   }
 
-  _onMouseLeave() {
+  _handleMouseLeave() {
     const {onMouseLeave} = this.props;
-    onMouseLeave();
+    if (onMouseLeave) {
+      onMouseLeave();
+    }
   }
 
-  _onCardClick() {
+  _handleCardClick() {
     const {onCardTitleClick, offer} = this.props;
-    onCardTitleClick(offer);
+    const {id} = offer;
+
+    onCardTitleClick(id);
   }
 
   render() {
-    const {offer, classNamePrefix} = this.props;
-    const {title, isPremium, previewPhoto, price, type} = offer;
+    const {offer, classNamePrefix, onButtonClick} = this.props;
+    const {title, isPremium, previewPhoto, price, type, id, isFavorite, rating} = offer;
     const getClass = (prefix) => prefix ? `place-card ` + prefix + `__card` : `place-card`;
+    const BookmarkButtonWrapped = withToggleItem(BookmarkButton, !isFavorite);
 
     return (
       <article
-        className={getClass(classNamePrefix)}
-        onMouseEnter={this._onCardHover}
-        onMouseLeave={this._onMouseLeave}>
+        onMouseEnter={this._handleCardHover}
+        onMouseLeave={this._handleMouseLeave}
+        className={getClass(classNamePrefix)}>
         {isPremium && <div className="place-card__mark">
           <span>Premium</span>
         </div>}
         <div className={classNamePrefix + `__image-wrapper place-card__image-wrapper`}>
-          <Link to='/property'>
+          <Link to={`/offer/` + id}>
             <img className="place-card__image" src={previewPhoto} width="260" height="200"
               alt="Place image"/>
           </Link>
@@ -51,23 +62,24 @@ class OfferCard extends React.PureComponent {
               <b className="place-card__price-value">&euro;{price}</b>
               <span className="place-card__price-text">&#47;&nbsp;night</span>
             </div>
-            <button className="place-card__bookmark-button button" type="button">
-              <svg className="place-card__bookmark-icon" width="18" height="19">
-                <use xlinkHref="#icon-bookmark"></use>
-              </svg>
-              <span className="visually-hidden">To bookmarks</span>
-            </button>
+            <BookmarkButtonWrapped
+              classNamePrefix={`place-card`}
+              isFavorite={isFavorite}
+              offerId={id}
+              onButtonClick={onButtonClick}
+            />
           </div>
           <div className="place-card__rating rating">
-            <div className="place-card__stars rating__stars">
-              <span style={{width: `80%`}}></span>
-              <span className="visually-hidden">Rating</span>
-            </div>
+            <Rating
+              classNamePrefix={`place-card`}
+              rating={rating}
+              isInteger={true}
+            />
           </div>
-          <h2 className="place-card__name" onClick={this._onCardClick}>
-            <Link to='/property'>{title}</Link>
+          <h2 className="place-card__name" onClick={this._handleCardClick}>
+            <Link to={`/offer/` + id}>{title}</Link>
           </h2>
-          <p className="place-card__type">{type}</p>
+          <p className="place-card__type">{capitalize(type)}</p>
         </div>
       </article>);
   }
@@ -75,10 +87,11 @@ class OfferCard extends React.PureComponent {
 
 OfferCard.propTypes = {
   offer: PropTypes.shape(offerShape).isRequired,
-  onCardTitleClick: PropTypes.func.isRequired,
-  onCardHover: PropTypes.func.isRequired,
   classNamePrefix: PropTypes.string.isRequired,
-  onMouseLeave: PropTypes.func.isRequired
+  onButtonClick: PropTypes.func.isRequired,
+  onCardTitleClick: PropTypes.func.isRequired,
+  onCardHover: PropTypes.func,
+  onMouseLeave: PropTypes.func
 };
 
 export default OfferCard;

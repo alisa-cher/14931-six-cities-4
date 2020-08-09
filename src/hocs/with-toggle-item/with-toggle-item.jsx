@@ -1,11 +1,11 @@
 import React, {PureComponent} from 'react';
 
-const withToggleItem = (Component) => {
+const withToggleItem = (Component, initialValue = true) => {
   class HocClass extends PureComponent {
     constructor(props) {
       super(props);
       this.state = {
-        isDisabled: true,
+        isDisabled: initialValue,
       };
       this._toggleItem = this._toggleItem.bind(this);
     }

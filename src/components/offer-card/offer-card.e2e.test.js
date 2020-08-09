@@ -21,8 +21,10 @@ it(`Card is hovered`, () => {
         onCardHover={clickHandler}
         offer={offer}
         classNamePrefix={`just-some-prefix-for-tests`}
-      />
+        onButtonClick={() => {}}/>
   );
   offerCard.simulate(`mouseEnter`);
   expect(clickHandler).toHaveBeenCalledWith(offer);
 });
+
+

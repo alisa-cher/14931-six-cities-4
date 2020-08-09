@@ -1,11 +1,13 @@
 import React from 'react';
-import MainPage from '../main/main.jsx';
+import MainPage from "./main-page.jsx";
 import renderer from 'react-test-renderer';
 import {BrowserRouter} from "react-router-dom";
 
 jest.mock(`../map/map.jsx`, () => jest.fn().mockReturnValue(null));
 
 const offers = [{
+  id: 1,
+  isFavorite: true,
   type: `appartement`,
   price: 140,
   title: `just amazing1`,
@@ -14,6 +16,8 @@ const offers = [{
   previewPhoto: `img/apartment-01.jpg`
 },
 {
+  id: 2,
+  isFavorite: false,
   type: `room`,
   price: 45,
   title: `just amazing2`,
@@ -47,7 +51,8 @@ it(`Main page renders correctly`, () => {
             setActiveItem={() => {}}
             resetActiveItem={() => {}}
             activeSorting={`top-rated` }
-            isUserLoggedIn/>
+            isUserLoggedIn={false}
+            onFavoriteButtonClick={() => {}}/>
         </BrowserRouter>
     )
     .toJSON();

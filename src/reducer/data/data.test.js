@@ -4,20 +4,62 @@ import {reducer, ActionType, Operation} from "./data.js";
 
 const api = createAPI(() => {});
 
+const initialState = {
+  offers: [],
+  favorites: [],
+  comments: [],
+  nearbyOffers: []
+};
+
 it(`Reducer without additional parameters should return initial state`, () => {
-  expect(reducer(void 0, {})).toEqual({
-    offers: [],
-  });
+  expect(reducer(void 0, {})).toEqual(initialState);
 });
 
-it(`Reducer should update offers by loaded offers`, () => {
-  expect(reducer({
-    offers: [],
-  }, {
+it(`Reducer should update offers`, () => {
+  expect(reducer(initialState, {
     type: ActionType.GET_OFFERS,
     payload: [{}, {}],
   })).toEqual({
-    offers: [{}, {}]
+    offers: [{}, {}],
+    favorites: [],
+    comments: [],
+    nearbyOffers: []
+  });
+});
+
+it(`Reducer should update favorite offers`, () => {
+  expect(reducer(initialState, {
+    type: ActionType.GET_FAVORITES,
+    payload: [{}, {}],
+  })).toEqual({
+    offers: [],
+    favorites: [{}, {}],
+    comments: [],
+    nearbyOffers: []
+  });
+});
+
+it(`Reducer should update nearby offers`, () => {
+  expect(reducer(initialState, {
+    type: ActionType.GET_NEARBY_OFFERS,
+    payload: [{}, {}],
+  })).toEqual({
+    offers: [],
+    favorites: [],
+    comments: [],
+    nearbyOffers: [{}, {}]
+  });
+});
+
+it(`Reducer should update comments`, () => {
+  expect(reducer(initialState, {
+    type: ActionType.GET_COMMENTS,
+    payload: [{}, {}],
+  })).toEqual({
+    offers: [],
+    favorites: [],
+    comments: [{}, {}],
+    nearbyOffers: []
   });
 });
 
@@ -32,9 +74,14 @@ describe(`Operation functions correctly`, () => {
       .onGet(`/hotels`)
       .reply(200, [{fake: true}]);
 
-    return offersLoader(dispatch, () => {}, api)
+    return offersLoader(dispatch, () => {
+      return {
+        data: {
+          offers: [{city: `Amsterdam`}]
+        }
+      };
+    }, api)
       .then(() => {
-        expect(dispatch).toHaveBeenCalledTimes(1);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.GET_OFFERS,
           payload: [{fake: true}],

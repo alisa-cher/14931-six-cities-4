@@ -14,7 +14,7 @@ const ActionType = {
 };
 
 const ActionCreator = {
-  requireAuthorization: (status) => {
+  setAuthStatus: (status) => {
     return {
       type: ActionType.REQUIRED_AUTHORIZATION,
       payload: status,
@@ -47,12 +47,12 @@ const Operation = {
   checkAuth: (adapter) => (dispatch, getState, api) => {
     return api.get(`/login`)
       .then((response) => {
+        dispatch(ActionCreator.setAuthStatus(AuthorizationStatus.AUTH));
         const mappedData = adapter(response.data);
-        dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
         dispatch(ActionCreator.setUser(mappedData));
       })
-      .catch((err) => {
-        throw err;
+      .catch(() => {
+        dispatch(ActionCreator.setAuthStatus(AuthorizationStatus.NO_AUTH));
       });
   },
 
@@ -62,7 +62,7 @@ const Operation = {
       password: authData.password,
     })
       .then(() => {
-        dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
+        dispatch(ActionCreator.setAuthStatus(AuthorizationStatus.AUTH));
       })
       .catch((err) => {
         throw err;

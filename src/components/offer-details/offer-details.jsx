@@ -1,65 +1,74 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {offerShape} from "../../types";
+import {sliceAnArray, capitalize} from "../../helpers";
+import {mapComments, mapHotels} from "../../data/adapter";
+import {filterOffersById, getNearbyOffers, getComments} from "../../reducer/data/selectors";
 import CommentsList from "../comments-list/comments-list.jsx";
+import {Operation as DataOperation} from "../../reducer/data/data";
+import {connect} from "react-redux";
 import OffersList from "../offers-list/offers-list.jsx";
 import ReviewForm from "../review-form/review-form.jsx";
 import Map from "../map/map.jsx";
-import {sliceAnArray} from "../../helpers.js";
-import {detailedOfferShape, offerShape} from "../../types.js";
+import BookmarkButton from "../bookmark-button/bookmark-button.jsx";
+import Rating from "../rating/rating.jsx";
+import Header from "../header/header.jsx";
 import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
 import withToggleItem from "../../hocs/with-toggle-item/with-toggle-item.jsx";
 
-const ReviewFormWrapped = withToggleItem(withActiveItem(ReviewForm));
+const NEARBY_OFFERS_MAX_AMOUNT = 3;
+const COMMENTS_MAX_AMOUNT = 10;
+const ReviewFormWrapped = withActiveItem(withToggleItem(ReviewForm));
 
-const OfferDetails = (props) => {
-  const {
-    isSendReviewError,
-    isUserLoggedIn,
-    onSubmit,
-    offer,
-    activeItem,
-    nearbyOffers,
-    comments,
-    onCardTitleClick,
-    setActiveItem,
-    resetActiveItem,
-    cityCoords,
-    cityZoom
-  } = props;
+class OfferDetails extends React.PureComponent {
+  componentDidMount() {
+    const {
+      onGetComments,
+      onGetNearbyOffers,
+      hotelId
+    } = this.props;
 
-  const {title, description, rating, isPremium, photos, price, type, goods, host, bedrooms, maxAdults, id} = offer;
-  const {avatar, isPro, name} = host;
-  const commentsLength = comments.length;
-  const NEARBY_OFFERS_MAX_AMOUNT = 3;
-  const COMMENTS_MAX_AMOUNT = 10;
-  const offersToRender = sliceAnArray(nearbyOffers, NEARBY_OFFERS_MAX_AMOUNT);
-  const commentsToRender = sliceAnArray(comments, COMMENTS_MAX_AMOUNT);
-  const sortedComments = commentsToRender.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+    onGetComments(hotelId);
+    onGetNearbyOffers(hotelId);
+  }
 
-  return (
-    <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <a className="header__logo-link" href="main.html">
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
-              </a>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+  render() {
+    const {
+      offers,
+      hotelId,
+      userEmail,
+      userPhoto,
+      onFavoriteButtonClick,
+      isSendReviewError,
+      isUserLoggedIn,
+      onSubmit,
+      activeItem,
+      nearbyOffers,
+      comments,
+      setActiveItem,
+      resetActiveItem,
+      cityCoords,
+      cityZoom,
+      onCardTitleClick
+    } = this.props;
+
+    const offer = filterOffersById(offers, hotelId);
+
+    const {title, description, rating, isPremium, photos, price, type, goods, host, bedrooms, maxAdults, id, isFavorite} = offer;
+    const {avatar, isPro, name} = host;
+    const commentsLength = comments.length;
+    const offersToRender = sliceAnArray(nearbyOffers, NEARBY_OFFERS_MAX_AMOUNT);
+    const commentsToRender = sliceAnArray(comments, COMMENTS_MAX_AMOUNT);
+    const sortedComments = commentsToRender.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    const BookmarkButtonWrapped = withToggleItem(BookmarkButton, !isFavorite);
+
+    return (<div className="page">
+      <Header
+        isUserLoggedIn={isUserLoggedIn}
+        email={userEmail}
+        photo={userPhoto}
+      />
       <main className="page__main page__main--property">
         <section className="property">
           <div className="property__gallery-container container">
@@ -80,23 +89,25 @@ const OfferDetails = (props) => {
                 <h1 className="property__name">
                   {title}
                 </h1>
-                <button className="property__bookmark-button button" type="button">
-                  <svg className="property__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"/>
-                  </svg>
-                  <span className="visually-hidden">To bookmarks</span>
-                </button>
+                <BookmarkButtonWrapped
+                  offerId={hotelId}
+                  classNamePrefix={`property`}
+                  isFavorite={isFavorite}
+                  onButtonClick={onFavoriteButtonClick}
+                  isBig={true}
+                />
               </div>
               <div className="property__rating rating">
-                <div className="property__stars rating__stars">
-                  <span style={{width: `80%`}}/>
-                  <span className="visually-hidden">Rating</span>
-                </div>
+                <Rating
+                  classNamePrefix={`property`}
+                  rating={rating}
+                  isInteger={true}
+                />
                 <span className="property__rating-value rating__value">{rating}</span>
               </div>
               <ul className="property__features">
                 <li className="property__feature property__feature--entire">
-                  {type}
+                  {capitalize(type)}
                 </li>
                 <li className="property__feature property__feature--bedrooms">
                   {bedrooms > 1 ? bedrooms + ` Bedrooms` : bedrooms + ` Bedroom`}
@@ -123,7 +134,7 @@ const OfferDetails = (props) => {
                 <h2 className="property__host-title">Meet the host</h2>
                 <div className="property__host-user user">
                   <div className={`property__avatar-wrapper user__avatar-wrapper ${isPro ? `` : `property__avatar-wrapper--pro`}`}>
-                    <img className="property__avatar user__avatar" src={avatar} width="74" height="74"
+                    <img className="property__avatar user__avatar" src={`../` + avatar} width="74" height="74"
                       alt="Host avatar"/>
                   </div>
                   <span className="property__user-name">
@@ -140,11 +151,11 @@ const OfferDetails = (props) => {
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{commentsLength}</span></h2>
                 <CommentsList comments={sortedComments}/>
                 {isUserLoggedIn &&
-                  <ReviewFormWrapped
-                    onSubmit={onSubmit}
-                    offerId={id}
-                    isError={isSendReviewError}
-                  />}
+                <ReviewFormWrapped
+                  onSubmit={onSubmit}
+                  offerId={id}
+                  isError={isSendReviewError}
+                />}
               </section>
             </div>
           </div>
@@ -163,31 +174,54 @@ const OfferDetails = (props) => {
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <OffersList
               offers={offersToRender}
-              onCardTitleClick={onCardTitleClick}
               onCardHover={setActiveItem}
               onCardMouseLeave={resetActiveItem}
               classNamePrefix={`near-places`}
+              onFavoriteButtonClick={onFavoriteButtonClick}
+              onCardTitleClick={onCardTitleClick}
             />
           </section>
         </div>
       </main>
-    </div>
-  );
-};
+    </div>);
+  }
+}
 
 OfferDetails.propTypes = {
+  offers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired,
+  nearbyOffers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired,
+  cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
+  onCardTitleClick: PropTypes.func.isRequired,
+  onGetComments: PropTypes.func.isRequired,
+  onGetNearbyOffers: PropTypes.func.isRequired,
+  comments: PropTypes.array.isRequired,
+  hotelId: PropTypes.number.isRequired,
+  cityZoom: PropTypes.number.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  setActiveItem: PropTypes.func.isRequired,
+  resetActiveItem: PropTypes.func.isRequired,
+  onFavoriteButtonClick: PropTypes.func.isRequired,
   isUserLoggedIn: PropTypes.bool,
   isSendReviewError: PropTypes.bool,
-  offer: PropTypes.shape(detailedOfferShape).isRequired,
   activeItem: PropTypes.object,
-  nearbyOffers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired,
-  comments: PropTypes.array.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  onCardTitleClick: PropTypes.func.isRequired,
-  cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
-  cityZoom: PropTypes.number.isRequired,
-  setActiveItem: PropTypes.func.isRequired,
-  resetActiveItem: PropTypes.func.isRequired
+  userEmail: PropTypes.string,
+  userPhoto: PropTypes.string
 };
 
-export default OfferDetails;
+const mapStateToProps = (state) => ({
+  nearbyOffers: getNearbyOffers(state),
+  comments: getComments(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onGetNearbyOffers(id) {
+    dispatch(DataOperation.loadNearbyOffers(id, mapHotels));
+  },
+
+  onGetComments(id) {
+    dispatch(DataOperation.loadComments(id, mapComments));
+  }
+});
+
+export {OfferDetails};
+export default connect(mapStateToProps, mapDispatchToProps)(OfferDetails);

@@ -23,10 +23,10 @@ const options = [
 class SortingOptions extends React.PureComponent {
   constructor(props) {
     super(props);
-    this._onOptionClick = this._onOptionClick.bind(this);
+    this._handleOptionClick = this._handleOptionClick.bind(this);
   }
 
-  _onOptionClick(evt) {
+  _handleOptionClick(evt) {
     const {onSortingClick} = this.props;
     onSortingClick(evt.target.value);
   }
@@ -37,7 +37,7 @@ class SortingOptions extends React.PureComponent {
       <select
         className="places__sorting-type"
         id="places-sorting"
-        onChange={this._onOptionClick}
+        onChange={this._handleOptionClick}
       >
         {options.map((option) =>
           <option key={option.value}

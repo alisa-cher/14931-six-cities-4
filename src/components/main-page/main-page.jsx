@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import OffersList from "../offers-list/offers-list.jsx";
 import SortingOptions from "../sorting-options/sorting-options.jsx";
+import {cityShape} from "../../types.js";
+import OffersList from "../offers-list/offers-list.jsx";
+import Header from "../header/header.jsx";
 import Map from "../map/map.jsx";
 import LocationsList from "../locations-list/locations-list.jsx";
-import {cityShape} from "../../types.js";
 
 const MainPage = (props) => {
   const {
@@ -17,13 +18,14 @@ const MainPage = (props) => {
     cityCoords,
     cityZoom,
     activeLocation,
-    onCardTitleClick,
     setActiveItem,
     resetActiveItem,
     onMenuClick,
     onSortingClick,
     activeItem,
     detailedOffer,
+    onFavoriteButtonClick,
+    onCardTitleClick
   } = props;
 
   const numberOfOffers = offers.length;
@@ -31,35 +33,11 @@ const MainPage = (props) => {
 
   return (
     <div className="page page--gray page--main">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <a className="header__logo-link header__logo-link--active">
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
-              </a>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                      <img style={{borderRadius: 10 + `px`}}
-                        src={isUserLoggedIn ? userPhoto : `../img/avatar.svg`}
-                        alt="user avatar"
-                        width="81"
-                        height="41"/>
-                    </div>
-                    {isUserLoggedIn && <span className="header__user-name user__name">{userEmail}</span>}
-                    {!isUserLoggedIn && <span className="header__login">Sign in</span>}
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+      <Header
+        isUserLoggedIn={isUserLoggedIn}
+        email={userEmail}
+        photo={userPhoto}
+      />
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <LocationsList
@@ -78,10 +56,11 @@ const MainPage = (props) => {
               />
               <OffersList
                 offers={offers}
-                onCardTitleClick={onCardTitleClick}
                 onCardHover={setActiveItem}
                 onCardMouseLeave={resetActiveItem}
+                onCardTitleClick={onCardTitleClick}
                 classNamePrefix={`cities`}
+                onFavoriteButtonClick={onFavoriteButtonClick}
               />
             </section>
             <div className="cities__right-section">
@@ -107,7 +86,6 @@ MainPage.propTypes = {
   userEmail: PropTypes.string,
   userPhoto: PropTypes.string,
   offers: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onCardTitleClick: PropTypes.func.isRequired,
   activeLocation: PropTypes.shape(cityShape),
   onMenuClick: PropTypes.func.isRequired,
   onSortingClick: PropTypes.func.isRequired,
@@ -117,6 +95,8 @@ MainPage.propTypes = {
   cityZoom: PropTypes.number.isRequired,
   setActiveItem: PropTypes.func.isRequired,
   resetActiveItem: PropTypes.func.isRequired,
+  onCardTitleClick: PropTypes.func.isRequired,
+  onFavoriteButtonClick: PropTypes.func.isRequired,
   activeItem: PropTypes.object,
   detailedOffer: PropTypes.object
 };

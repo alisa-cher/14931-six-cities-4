@@ -6,8 +6,24 @@ const getOffers = (state) => {
   return state[NameSpace.DATA].offers;
 };
 
+const getNearbyOffers = (state) => {
+  return state[NameSpace.DATA].nearbyOffers;
+};
+
+const getComments = (state) => {
+  return state[NameSpace.DATA].comments;
+};
+
 const filterOffers = (offers, location) => {
   return offers.filter((offer) => offer.city.name === location);
+};
+
+const filterOffersById = (offers, id) => {
+  return offers.find((offer) => offer.id === id);
+};
+
+const getFavoriteOffers = (state) => {
+  return state[NameSpace.DATA].favorites;
 };
 
 const sortOffers = (offers, activeSort) => {
@@ -23,17 +39,39 @@ const sortOffers = (offers, activeSort) => {
   }
 };
 
-const getCities = createSelector(
+const getCities = (offers) => {
+  const cities = [];
+  const findElement = (property) => cities.some((el) => el.name === property);
+  offers.map((offer) => {
+    if (!findElement(offer.city.name)) {
+      cities.push(offer.city);
+    }
+  });
+  return cities;
+};
+
+const getAllCities = createSelector(
     getOffers,
-    (offers) => {
-      const cities = [];
-      const findElement = (property) => cities.some((el) => el.name === property);
-      offers.map((offer) => {
-        if (!findElement(offer.city.name)) {
-          cities.push(offer.city);
-        }
+    (offers) => getCities(offers)
+);
+
+const getFavoriteCities = createSelector(
+    getFavoriteOffers,
+    (offers) => getCities(offers)
+);
+
+const getFavoriteOffersGroupedByCity = createSelector(
+    getFavoriteCities,
+    getFavoriteOffers,
+    (cities, offers) => {
+      const array = [];
+      cities.forEach((city) => {
+        const obj = {};
+        obj[`city`] = city.name;
+        obj[`offers`] = filterOffers(offers, city.name);
+        array.push(obj);
       });
-      return cities;
+      return array;
     }
 );
 
@@ -46,4 +84,12 @@ const getVisibleOffers = createSelector(
     }
 );
 
-export {getCities, getVisibleOffers};
+export {
+  getAllCities,
+  getVisibleOffers,
+  filterOffersById,
+  getFavoriteOffersGroupedByCity,
+  getNearbyOffers,
+  getComments,
+  getOffers
+};
