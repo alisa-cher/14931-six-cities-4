@@ -1,11 +1,11 @@
 const initialState = {
   city: {},
-  sorting: `popular`
+  sorting: `popular`,
 };
 
 const ActionType = {
   CHANGE_CITY: `CHANGE_CITY`,
-  CHANGE_SORTING: `CHANGE_SORTING`,
+  CHANGE_SORTING: `CHANGE_SORTING`
 };
 
 const ActionCreator = {
@@ -17,7 +17,7 @@ const ActionCreator = {
   setActiveSorting: (sorting) => ({
     type: ActionType.CHANGE_SORTING,
     payload: sorting
-  })
+  }),
 };
 
 const reducer = (state = initialState, action) => {

@@ -1,3 +1,7 @@
+import {Operation as DataOperation} from "../data/data";
+import {mapHotels} from "../../data/adapter";
+import history from "../../history.js";
+
 const AuthorizationStatus = {
   AUTH: `AUTH`,
   NO_AUTH: `NO_AUTH`,
@@ -14,7 +18,7 @@ const ActionType = {
 };
 
 const ActionCreator = {
-  requireAuthorization: (status) => {
+  setAuthStatus: (status) => {
     return {
       type: ActionType.REQUIRED_AUTHORIZATION,
       payload: status,
@@ -48,8 +52,9 @@ const Operation = {
     return api.get(`/login`)
       .then((response) => {
         const mappedData = adapter(response.data);
-        dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
         dispatch(ActionCreator.setUser(mappedData));
+        dispatch(DataOperation.getFavorites(mapHotels));
+        history.push(`/favorites`);
       })
       .catch((err) => {
         throw err;
@@ -62,7 +67,7 @@ const Operation = {
       password: authData.password,
     })
       .then(() => {
-        dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH));
+        dispatch(ActionCreator.setAuthStatus(AuthorizationStatus.AUTH));
       })
       .catch((err) => {
         throw err;

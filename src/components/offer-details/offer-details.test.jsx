@@ -1,11 +1,12 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import OfferDetails from '../offer-details/offer-details.jsx';
 import {BrowserRouter} from "react-router-dom";
+import {OfferDetails} from '../offer-details/offer-details.jsx';
 
 jest.mock(`../map/map`, () => jest.fn().mockReturnValue(null));
 
 const offer = {
+  id: 0,
   bedrooms: 3,
   description: `An independent House`,
   maxAdults: 4,
@@ -13,6 +14,7 @@ const offer = {
   price: 140,
   title: `just amazing1`,
   isPremium: true,
+  isFavorite: true,
   rating: 4.3,
   photos: [`img/room.jpg`, `img/studio-01.jpg`],
   goods: [`Heating`, `Kitchen`, `Cable TV`, `Washing machine`, `Coffee machine`, `Dishwasher`],
@@ -38,7 +40,7 @@ it(`Property page renders correctly`, () => {
     .create(
         <BrowserRouter>
           <OfferDetails
-            offer={offer}
+            isUserLoggedIn={true}
             nearbyOffers={[offer]}
             comments={comments}
             onCardTitleClick={() => {}}
@@ -48,7 +50,13 @@ it(`Property page renders correctly`, () => {
             cityZoom={1}
             onSubmit={() => {}}
             resetActiveItem={() => {}}
-            setActiveItem={() => {}}/>
+            setActiveItem={() => {}}
+            hotelId={0}
+            offers={[offer]}
+            onFavoriteButtonClick={() => {}}
+            onGetComments={() => {}}
+            onGetNearbyOffers={() => {}}
+          />
         </BrowserRouter>
     )
     .toJSON();

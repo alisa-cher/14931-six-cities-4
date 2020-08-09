@@ -20,7 +20,7 @@ exports[`Offers list renders ok 1`] = `
       className="just-some-prefix-for-tests__image-wrapper place-card__image-wrapper"
     >
       <a
-        href="/property"
+        href="/offer/5"
         onClick={[Function]}
       >
         <img
@@ -54,13 +54,14 @@ exports[`Offers list renders ok 1`] = `
           </span>
         </div>
         <button
-          className="place-card__bookmark-button button"
+          className="button place-card__bookmark-button place-card__bookmark-button--active"
+          onClick={[Function]}
           type="button"
         >
           <svg
-            className="place-card__bookmark-icon"
-            height="19"
-            width="18"
+            className="button place-card__bookmark-icon"
+            height={19}
+            width={18}
           >
             <use
               xlinkHref="#icon-bookmark"
@@ -77,20 +78,24 @@ exports[`Offers list renders ok 1`] = `
         className="place-card__rating rating"
       >
         <div
-          className="place-card__stars rating__stars"
+          className="place-card__rating place-card"
         >
-          <span
-            style={
-              Object {
-                "width": "80%",
-              }
-            }
-          />
-          <span
-            className="visually-hidden"
+          <div
+            className="place-card__stars rating__stars"
           >
-            Rating
-          </span>
+            <span
+              style={
+                Object {
+                  "width": "80%",
+                }
+              }
+            />
+            <span
+              className="visually-hidden"
+            >
+              Rating
+            </span>
+          </div>
         </div>
       </div>
       <h2
@@ -98,7 +103,7 @@ exports[`Offers list renders ok 1`] = `
         onClick={[Function]}
       >
         <a
-          href="/property"
+          href="/offer/5"
           onClick={[Function]}
         >
           just amazing1
@@ -107,7 +112,7 @@ exports[`Offers list renders ok 1`] = `
       <p
         className="place-card__type"
       >
-        appartement
+        Appartement
       </p>
     </div>
   </article>

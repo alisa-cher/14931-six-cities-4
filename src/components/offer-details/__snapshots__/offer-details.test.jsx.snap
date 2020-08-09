@@ -18,13 +18,14 @@ exports[`Property page renders correctly 1`] = `
         >
           <a
             className="header__logo-link"
-            href="main.html"
+            href="/"
+            onClick={[Function]}
           >
             <img
               alt="6 cities logo"
               className="header__logo"
               height="41"
-              src="img/logo.svg"
+              src="../img/logo.svg"
               width="81"
             />
           </a>
@@ -40,16 +41,26 @@ exports[`Property page renders correctly 1`] = `
             >
               <a
                 className="header__nav-link header__nav-link--profile"
-                href="#"
+                href="/favorites"
+                onClick={[Function]}
               >
                 <div
                   className="header__avatar-wrapper user__avatar-wrapper"
-                />
+                >
+                  <img
+                    alt="user avatar"
+                    height="41"
+                    style={
+                      Object {
+                        "borderRadius": "10px",
+                      }
+                    }
+                    width="81"
+                  />
+                </div>
                 <span
                   className="header__user-name user__name"
-                >
-                  Oliver.conner@gmail.com
-                </span>
+                />
               </a>
             </li>
           </ul>
@@ -111,13 +122,14 @@ exports[`Property page renders correctly 1`] = `
               just amazing1
             </h1>
             <button
-              className="property__bookmark-button button"
+              className="button property__bookmark-button property__bookmark-button--active"
+              onClick={[Function]}
               type="button"
             >
               <svg
-                className="property__bookmark-icon"
-                height="33"
-                width="31"
+                className="button property__bookmark-icon"
+                height={33}
+                width={32}
               >
                 <use
                   xlinkHref="#icon-bookmark"
@@ -134,20 +146,24 @@ exports[`Property page renders correctly 1`] = `
             className="property__rating rating"
           >
             <div
-              className="property__stars rating__stars"
+              className="property__rating property"
             >
-              <span
-                style={
-                  Object {
-                    "width": "80%",
-                  }
-                }
-              />
-              <span
-                className="visually-hidden"
+              <div
+                className="property__stars rating__stars"
               >
-                Rating
-              </span>
+                <span
+                  style={
+                    Object {
+                      "width": "80%",
+                    }
+                  }
+                />
+                <span
+                  className="visually-hidden"
+                >
+                  Rating
+                </span>
+              </div>
             </div>
             <span
               className="property__rating-value rating__value"
@@ -161,7 +177,7 @@ exports[`Property page renders correctly 1`] = `
             <li
               className="property__feature property__feature--entire"
             >
-              appartement
+              Appartement
             </li>
             <li
               className="property__feature property__feature--bedrooms"
@@ -251,7 +267,7 @@ exports[`Property page renders correctly 1`] = `
                   alt="Host avatar"
                   className="property__avatar user__avatar"
                   height="74"
-                  src="img/avatar.svg"
+                  src="../img/avatar.svg"
                   width="74"
                 />
               </div>
@@ -314,7 +330,7 @@ exports[`Property page renders correctly 1`] = `
                   className="reviews__info"
                 >
                   <div
-                    className="reviews__rating rating"
+                    className="reviews__rating reviews"
                   >
                     <div
                       className="reviews__stars rating__stars"
@@ -347,6 +363,180 @@ exports[`Property page renders correctly 1`] = `
                 </div>
               </li>
             </ul>
+            <form
+              action="#"
+              className="reviews__form form"
+              method="post"
+              onSubmit={[Function]}
+            >
+              <label
+                className="reviews__label form__label"
+                htmlFor="review"
+              >
+                Your review
+              </label>
+              <div
+                className="reviews__rating-form form__rating"
+              >
+                <input
+                  checked={false}
+                  className="form__rating-input visually-hidden"
+                  id="5-stars"
+                  name="rating"
+                  onChange={[Function]}
+                  type="radio"
+                  value={5}
+                />
+                <label
+                  className="reviews__rating-label form__rating-label"
+                  htmlFor="5-stars"
+                  title="perfect"
+                >
+                  <svg
+                    className="form__star-image"
+                    height="33"
+                    width="37"
+                  >
+                    <use
+                      xlinkHref="#icon-star"
+                    />
+                  </svg>
+                </label>
+                <input
+                  checked={false}
+                  className="form__rating-input visually-hidden"
+                  id="4-stars"
+                  name="rating"
+                  onChange={[Function]}
+                  type="radio"
+                  value={4}
+                />
+                <label
+                  className="reviews__rating-label form__rating-label"
+                  htmlFor="4-stars"
+                  title="good"
+                >
+                  <svg
+                    className="form__star-image"
+                    height="33"
+                    width="37"
+                  >
+                    <use
+                      xlinkHref="#icon-star"
+                    />
+                  </svg>
+                </label>
+                <input
+                  checked={false}
+                  className="form__rating-input visually-hidden"
+                  id="3-stars"
+                  name="rating"
+                  onChange={[Function]}
+                  type="radio"
+                  value={3}
+                />
+                <label
+                  className="reviews__rating-label form__rating-label"
+                  htmlFor="3-stars"
+                  title="not bad"
+                >
+                  <svg
+                    className="form__star-image"
+                    height="33"
+                    width="37"
+                  >
+                    <use
+                      xlinkHref="#icon-star"
+                    />
+                  </svg>
+                </label>
+                <input
+                  checked={false}
+                  className="form__rating-input visually-hidden"
+                  id="2-stars"
+                  name="rating"
+                  onChange={[Function]}
+                  type="radio"
+                  value={2}
+                />
+                <label
+                  className="reviews__rating-label form__rating-label"
+                  htmlFor="2-stars"
+                  title="badly"
+                >
+                  <svg
+                    className="form__star-image"
+                    height="33"
+                    width="37"
+                  >
+                    <use
+                      xlinkHref="#icon-star"
+                    />
+                  </svg>
+                </label>
+                <input
+                  checked={false}
+                  className="form__rating-input visually-hidden"
+                  id="1-stars"
+                  name="rating"
+                  onChange={[Function]}
+                  type="radio"
+                  value={1}
+                />
+                <label
+                  className="reviews__rating-label form__rating-label"
+                  htmlFor="1-stars"
+                  title="terribly"
+                >
+                  <svg
+                    className="form__star-image"
+                    height="33"
+                    width="37"
+                  >
+                    <use
+                      xlinkHref="#icon-star"
+                    />
+                  </svg>
+                </label>
+              </div>
+              <textarea
+                className="reviews__textarea form__textarea"
+                id="review"
+                maxLength="500"
+                minLength="30"
+                name="review"
+                onChange={[Function]}
+                placeholder="Tell how was your stay, what you like and what can be improved"
+              />
+              <div
+                className="reviews__button-wrapper"
+              >
+                <p
+                  className="reviews__help"
+                >
+                  To submit review please make sure to set 
+                  <span
+                    className="reviews__star"
+                  >
+                    rating
+                  </span>
+                   and describe your stay with at least 
+                  <b
+                    className="reviews__text-amount"
+                  >
+                    50 characters
+                  </b>
+                  .
+                </p>
+                <button
+                  className="reviews__submit form__submit button"
+                  disabled={true}
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
           </section>
         </div>
       </div>
@@ -384,7 +574,7 @@ exports[`Property page renders correctly 1`] = `
               className="near-places__image-wrapper place-card__image-wrapper"
             >
               <a
-                href="/property"
+                href="/offer/0"
                 onClick={[Function]}
               >
                 <img
@@ -418,13 +608,14 @@ exports[`Property page renders correctly 1`] = `
                   </span>
                 </div>
                 <button
-                  className="place-card__bookmark-button button"
+                  className="button place-card__bookmark-button place-card__bookmark-button--active"
+                  onClick={[Function]}
                   type="button"
                 >
                   <svg
-                    className="place-card__bookmark-icon"
-                    height="19"
-                    width="18"
+                    className="button place-card__bookmark-icon"
+                    height={19}
+                    width={18}
                   >
                     <use
                       xlinkHref="#icon-bookmark"
@@ -441,20 +632,24 @@ exports[`Property page renders correctly 1`] = `
                 className="place-card__rating rating"
               >
                 <div
-                  className="place-card__stars rating__stars"
+                  className="place-card__rating place-card"
                 >
-                  <span
-                    style={
-                      Object {
-                        "width": "80%",
-                      }
-                    }
-                  />
-                  <span
-                    className="visually-hidden"
+                  <div
+                    className="place-card__stars rating__stars"
                   >
-                    Rating
-                  </span>
+                    <span
+                      style={
+                        Object {
+                          "width": "80%",
+                        }
+                      }
+                    />
+                    <span
+                      className="visually-hidden"
+                    >
+                      Rating
+                    </span>
+                  </div>
                 </div>
               </div>
               <h2
@@ -462,7 +657,7 @@ exports[`Property page renders correctly 1`] = `
                 onClick={[Function]}
               >
                 <a
-                  href="/property"
+                  href="/offer/0"
                   onClick={[Function]}
                 >
                   just amazing1
@@ -471,7 +666,7 @@ exports[`Property page renders correctly 1`] = `
               <p
                 className="place-card__type"
               >
-                appartement
+                Appartement
               </p>
             </div>
           </article>

@@ -1,5 +1,5 @@
-import {reducer, ActionType, AuthorizationStatus} from "./user.js";
 import MockAdapter from "axios-mock-adapter";
+import {reducer, ActionType, AuthorizationStatus} from "./user.js";
 import {createAPI} from "../../data/api";
 import {Operation} from "../user/user";
 
@@ -84,10 +84,6 @@ describe(`Operation functions correctly`, () => {
       .then(() => {
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
-          type: ActionType.REQUIRED_AUTHORIZATION,
-          payload: AuthorizationStatus.AUTH,
-        });
-        expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.SET_USER,
           payload: {name: `some user`},
         });

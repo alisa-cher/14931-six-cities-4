@@ -2,7 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import ErrorMessage from "./error-message.jsx";
 
-it(`Error message correctly`, () => {
+it(`Error message renders correctly`, () => {
   const tree = renderer
     .create(
         <ErrorMessage

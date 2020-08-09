@@ -17,6 +17,7 @@ const mockedCity = {
 };
 
 const mockedOffer = {
+  id: 1,
   bedrooms: 3,
   description: `An independent House`,
   maxAdults: 4,
@@ -24,6 +25,7 @@ const mockedOffer = {
   price: 140,
   title: `just amazing1`,
   isPremium: true,
+  isFavorite: true,
   rating: 4.3,
   previewPhoto: `img/apartment-01.jpg`,
   photos: [`img/room.jpg`, `img/studio-01.jpg`],
@@ -59,16 +61,18 @@ it(`App renders correctly`, () => {
             locations={[mockedCity, mockedCity]}
             cityCoords={[mockedCity.latitude, mockedCity.longitude]}
             offers={offers}
+            offerId={1}
+            isFavorite={true}
             onMenuClick={() => {}}
             onSortingClick={() => {}}
             activeSorting={`popular`}
             login={() => {}}
-            sendComment={() =>{}}/>
-        </Provider>, {
-          createNodeMock: () => {
-            return {};
-          }
-        }
+            sendComment={() =>{}}
+            onCardTitleClick={() =>{}}
+            onCommentSend={() =>{}}
+            onFavoriteButtonClick={() =>{}}
+          />
+        </Provider>
     )
     .toJSON();
   expect(tree).toMatchSnapshot();

@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Rating renders correctly 1`] = `
+<div
+  className="some-prefix__rating some-prefix"
+>
+  <div
+    className="some-prefix__stars rating__stars"
+  >
+    <span
+      style={
+        Object {
+          "width": "40%",
+        }
+      }
+    />
+    <span
+      className="visually-hidden"
+    >
+      Rating
+    </span>
+  </div>
+</div>
+`;

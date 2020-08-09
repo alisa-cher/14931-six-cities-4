@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import AuthPage from "./auth.jsx";
+import AuthPage from "./auth-page.jsx";
 
 it(`Auth form is submitted`, () => {
   const submitHandler = jest.fn();

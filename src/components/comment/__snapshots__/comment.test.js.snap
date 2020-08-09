@@ -28,7 +28,7 @@ exports[`Comment renders correctly 1`] = `
     className="reviews__info"
   >
     <div
-      className="reviews__rating rating"
+      className="reviews__rating reviews"
     >
       <div
         className="reviews__stars rating__stars"

@@ -5,10 +5,10 @@ import {cityShape} from "../../types.js";
 class LocationsList extends React.PureComponent {
   constructor(props) {
     super(props);
-    this._onItemClick = this._onItemClick.bind(this);
+    this._handleItemClick = this._handleItemClick.bind(this);
   }
 
-  _onItemClick(location) {
+  _handleItemClick(location) {
     const {onMenuClick} = this.props;
     onMenuClick(location);
   }
@@ -22,7 +22,7 @@ class LocationsList extends React.PureComponent {
           <ul className="locations__list tabs__list">
             {locations.map((location, index) =>
               <li className="locations__item" key={location.name + index}>
-                <a onClick={() => this._onItemClick(location)}
+                <a onClick={() => this._handleItemClick(location)}
                   className={(location.name === activeLocation.name) ? `tabs__item--active locations__item-link tabs__item` : `locations__item-link tabs__item`}>
                   <span>{location.name}</span>
                 </a>

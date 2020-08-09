@@ -5,10 +5,11 @@ import OfferCard from "../offer-card/offer-card.jsx";
 const OffersList = (props) => {
   const {
     offers,
-    onCardTitleClick,
     onCardHover,
     onCardMouseLeave,
-    classNamePrefix
+    classNamePrefix,
+    onFavoriteButtonClick,
+    onCardTitleClick
   } = props;
 
   const getClass = (prefix) => prefix ? `places__list ` + prefix + `__list` : `places__list`;
@@ -17,9 +18,10 @@ const OffersList = (props) => {
     {offers.map((offer, id) =>
       <OfferCard
         key={offer + id}
-        onCardTitleClick={onCardTitleClick}
         onCardHover={onCardHover}
         onMouseLeave={onCardMouseLeave}
+        onButtonClick={onFavoriteButtonClick}
+        onCardTitleClick={onCardTitleClick}
         offer={offer}
         classNamePrefix={classNamePrefix}
       />
@@ -29,11 +31,12 @@ const OffersList = (props) => {
 
 OffersList.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onCardTitleClick: PropTypes.func.isRequired,
   classNamePrefix: PropTypes.string.isRequired,
+  onFavoriteButtonClick: PropTypes.func.isRequired,
+  onCardTitleClick: PropTypes.func.isRequired,
   offersMaxAmount: PropTypes.number,
-  onCardHover: PropTypes.func.isRequired,
-  onCardMouseLeave: PropTypes.func.isRequired
+  onCardHover: PropTypes.func,
+  onCardMouseLeave: PropTypes.func
 };
 
 export default OffersList;

@@ -1,51 +1,49 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {Router, Route, Switch} from "react-router-dom";
 import {connect} from "react-redux";
-import {ActionCreator} from "../../reducer/app/app.js";
-import MainPage from "../main/main.jsx";
-import AuthPage from "../authorisation/auth.jsx";
-import OfferDetails from "../offer-details/offer-details.jsx";
-import comments from "../../mocks/comments";
-import {getVisibleOffers, getCities} from "../../reducer/data/selectors";
-import {getCityCoords, getCityZoom, getActiveSorting, getCurrentCity} from "../../reducer/app/selectors";
-import {getAuthorisationStatus, getUserEmail, getUserPhoto} from "../../reducer/user/selectors";
+import {AuthorizationStatus} from "../../reducer/user/user";
+import {ActionCreator as AppActionCreator} from "../../reducer/app/app.js";
 import {Operation as UserOperation} from "../../reducer/user/user";
 import {Operation as DataOperation} from "../../reducer/data/data";
-
+import {
+  getVisibleOffers,
+  getAllCities,
+  getFavoriteOffersGroupedByCity,
+  filterOffersById
+} from "../../reducer/data/selectors";
+import {mapComments, mapHotels, mapUser} from "../../data/adapter";
+import {getCityCoords, getCityZoom, getActiveSorting, getCurrentCity} from "../../reducer/app/selectors";
+import {getAuthorisationStatus, getUserEmail, getUserPhoto} from "../../reducer/user/selectors";
+import history from "../../history";
+import PrivateRoute from "../private-route/private-route.jsx";
+import OfferDetails from "../offer-details/offer-details.jsx";
+import ErrorPage from "../error-page/error-page.jsx";
+import MainPage from "../main-page/main-page.jsx";
+import AuthPage from "../auth-page/auth-page.jsx";
+import FavoritesPage from "../favorites-page/favorites-page.jsx";
 import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
-import {AuthorizationStatus} from "../../reducer/user/user";
+import {offerShape} from "../../types";
 
 const MainPageWrapped = withActiveItem(MainPage);
 const OfferDetailsWrapped = withActiveItem(OfferDetails);
 
 class App extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      detailedOffer: null
-    };
-    this._setDetailedOffer = this._setDetailedOffer.bind(this);
-  }
 
-  _setDetailedOffer(card) {
-    this.setState(() => {
-      return {detailedOffer: card};
-    });
-  }
-
-  _renderMainPage(isUserLoggedIn, detailedOffer) {
+  _renderMainPage(isUserLoggedIn) {
     const {
       userEmail,
       userPhoto,
       offers,
+      onFavoriteButtonClick,
       onMenuClick,
       onSortingClick,
       activeSorting,
       locations,
       city,
       cityCoords,
-      cityZoom
+      cityZoom,
+      onCardTitleClick
     } = this.props;
 
     return <MainPageWrapped
@@ -53,78 +51,159 @@ class App extends React.PureComponent {
       userEmail={userEmail}
       userPhoto={userPhoto}
       offers={offers}
-      onCardTitleClick={this._setDetailedOffer}
       locations={locations}
       activeLocation={city}
-      activeOffer={detailedOffer}
+      onFavoriteButtonClick={onFavoriteButtonClick}
       onMenuClick={onMenuClick}
       onSortingClick={onSortingClick}
       activeSorting={activeSorting}
       cityCoords={cityCoords}
       cityZoom={cityZoom}
+      onCardTitleClick={onCardTitleClick}
     />;
   }
 
-  _renderPropertyPage(isUserLoggedIn, detailedOffer) {
+  _renderPropertyPage(isUserLoggedIn, hotelId) {
     const {
+      userEmail,
+      userPhoto,
       offers,
       cityCoords,
       cityZoom,
-      sendComment,
+      onCommentSend,
+      onFavoriteButtonClick,
+      onCardTitleClick,
       isSendReviewError
     } = this.props;
 
     return <OfferDetailsWrapped
       isUserLoggedIn={isUserLoggedIn}
-      onSubmit={sendComment}
-      offer={detailedOffer}
-      nearbyOffers={offers}
-      comments={comments}
-      onCardTitleClick={this._setDetailedOffer}
+      userEmail={userEmail}
+      userPhoto={userPhoto}
+      onSubmit={onCommentSend}
+      onCardTitleClick={onCardTitleClick}
+      onFavoriteButtonClick={onFavoriteButtonClick}
+      offers={offers}
+      hotelId={hotelId}
       cityCoords={cityCoords}
       cityZoom={cityZoom}
-      isSendReviewError={isSendReviewError}/>;
+      isSendReviewError={isSendReviewError}
+    />;
+  }
+
+  _render404Page(isUserLoggedIn) {
+    const {
+      userEmail,
+      userPhoto
+    } = this.props;
+
+    return <ErrorPage
+      isUserLoggedIn={isUserLoggedIn}
+      userEmail={userEmail}
+      userPhoto={userPhoto}
+      status={`404`}
+      description={`Page is not found.`}
+    />;
   }
 
   render() {
-    const detailedOffer = this.state.detailedOffer;
 
     const {
       login,
       authStatus,
-      isOffersLoadError
+      userEmail,
+      userPhoto,
+      offers,
+      isOffersLoadError,
+      isFavoriteOffersLoadError,
+      onFavoriteButtonClick,
+      favoriteOffers,
+      onCardTitleClick
     } = this.props;
 
     const isUserLoggedIn = (authStatus === AuthorizationStatus.AUTH);
+    const offersLoaded = !!offers.length;
 
-    return <BrowserRouter>
+    return <Router history={history}>
       <Switch>
         <Route exact path="/login">
-          {!isUserLoggedIn && <AuthPage onSubmit={login}/>}
-          {isUserLoggedIn && !isOffersLoadError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
+          <AuthPage onSubmit={login}/>
         </Route>
-        <Route exact path="/">
-          {isOffersLoadError && <div> Placeholder for screen announcing an error to the user.</div>}
-          {!isOffersLoadError && this._renderMainPage(isUserLoggedIn, detailedOffer)}
+        <Route
+          exact
+          path={`/`}
+          render={() => {
+            return (
+              <React.Fragment>
+                {!isOffersLoadError && this._renderMainPage(isUserLoggedIn)}
+                {isOffersLoadError && <ErrorPage
+                  isUserLoggedIn={isUserLoggedIn}
+                  userEmail={userEmail}
+                  userPhoto={userPhoto}
+                  status={`Something went wrong. Please try again later.`}
+                  description={``}
+                />}
+                {!offersLoaded && <ErrorPage
+                  isUserLoggedIn={isUserLoggedIn}
+                  userEmail={userEmail}
+                  userPhoto={userPhoto}
+                />}
+              </React.Fragment>
+            );
+          }}>
         </Route>
-        <Route exact path="/property">
-          {detailedOffer && this._renderPropertyPage(isUserLoggedIn, detailedOffer)}
+        <Route exact path="/offer/:hotel_id/" render={
+          (data) => {
+            const hotelId = parseInt(data.match.params[`hotel_id`], 10);
+            const offer = filterOffersById(offers, hotelId);
+            if (offer) {
+              return this._renderPropertyPage(isUserLoggedIn, hotelId);
+            }
+            return this._render404Page(isUserLoggedIn);
+          }
+        }>
         </Route>
+        <PrivateRoute
+          exact
+          path={`/favorites`}
+          render={() => {
+            return (
+              <FavoritesPage
+                offers={favoriteOffers}
+                isUserLoggedIn={isUserLoggedIn}
+                userPhoto={userPhoto}
+                userEmail={userEmail}
+                offersLoadError={isFavoriteOffersLoadError}
+                onFavoriteButtonClick={onFavoriteButtonClick}
+                onCardTitleClick={onCardTitleClick}
+              />
+            );
+          }}/>
+        <Route path={`/`} render={() => this._render404Page(isUserLoggedIn)}/>
       </Switch>
-    </BrowserRouter>;
+    </Router>;
   }
 }
 
 App.propTypes = {
   login: PropTypes.func.isRequired,
+  onFavoriteButtonClick: PropTypes.func.isRequired,
   authStatus: PropTypes.string.isRequired,
   isSendReviewError: PropTypes.bool,
   isOffersLoadError: PropTypes.bool,
-  sendComment: PropTypes.func.isRequired,
+  isFavoriteOffersLoadError: PropTypes.bool,
+  onCommentSend: PropTypes.func.isRequired,
+  onCardTitleClick: PropTypes.func.isRequired,
   userEmail: PropTypes.string,
   userPhoto: PropTypes.string,
   user: PropTypes.object,
   offers: PropTypes.arrayOf(PropTypes.object),
+  favoriteOffers: PropTypes.arrayOf(PropTypes.shape(
+      {
+        city: PropTypes.string.isRequired,
+        offers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired
+      }
+  )),
   locations: PropTypes.arrayOf(PropTypes.object),
   city: PropTypes.object,
   cityCoords: PropTypes.arrayOf(PropTypes.number),
@@ -139,9 +218,11 @@ const mapStateToProps = (state) => ({
   userEmail: getUserEmail(state),
   userPhoto: getUserPhoto(state),
   isOffersLoadError: state.error.offersLoadError,
+  isFavoriteOffersLoadError: state.error.favoriteOffersLoadError,
   isSendReviewError: state.error.postReviewError,
   offers: state.error.offersLoadError ? [] : getVisibleOffers(state),
-  locations: state.error.offersLoadError ? [] : getCities(state),
+  favoriteOffers: getFavoriteOffersGroupedByCity(state),
+  locations: state.error.offersLoadError ? [] : getAllCities(state),
   city: state.error.offersLoadError ? {} : getCurrentCity(state),
   activeSorting: state.error.offersLoadError ? `` : getActiveSorting(state),
   cityCoords: state.error.offersLoadError ? [] : getCityCoords(state),
@@ -150,16 +231,26 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   login(authData) {
-    dispatch(UserOperation.login(authData));
+    dispatch(UserOperation.login(authData))
+      .then(() => dispatch(UserOperation.checkAuth(mapUser)));
   },
-  sendComment(data, id, onSend, onSuccess) {
-    dispatch(DataOperation.sendComment(data, id, onSend, onSuccess));
+  onCommentSend(data, id, onSend, onSuccess) {
+    dispatch(DataOperation.sendComment(data, id, onSend, onSuccess))
+      .then(() => dispatch(DataOperation.loadComments(id, mapComments)));
+  },
+  onFavoriteButtonClick(data, offerId, status) {
+    dispatch(DataOperation.changeFavoriteStatus(data, offerId, status))
+      .then(() => dispatch(DataOperation.getFavorites(mapHotels)));
   },
   onMenuClick(location) {
-    dispatch(ActionCreator.setActiveLocation(location));
+    dispatch(AppActionCreator.setActiveLocation(location));
   },
   onSortingClick(option) {
-    dispatch(ActionCreator.setActiveSorting(option));
+    dispatch(AppActionCreator.setActiveSorting(option));
+  },
+  onCardTitleClick(id) {
+    dispatch(DataOperation.loadComments(id, mapComments));
+    dispatch(DataOperation.loadNearbyOffers(id, mapHotels));
   }
 });
 

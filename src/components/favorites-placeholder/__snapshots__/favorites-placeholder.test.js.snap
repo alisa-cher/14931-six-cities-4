@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Favorites placeholders renders correctly 1`] = `
+<section
+  className="favorites favorites--empty"
+  style={
+    Object {
+      "minHeight": "550px",
+    }
+  }
+>
+  <h1
+    className="visually-hidden"
+  >
+    some-heading
+  </h1>
+  <div
+    className="favorites__status-wrapper"
+  >
+    <b
+      className="favorites__status"
+    >
+      some-title
+    </b>
+    <p
+      className="favorites__status-description"
+    >
+      some-description
+    </p>
+  </div>
+</section>
+`;
