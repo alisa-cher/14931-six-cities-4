@@ -1,24 +1,35 @@
 import React, {createRef} from "react";
 import PropTypes from "prop-types";
+import {ClientEvaluation, Textarea} from "../../const.js";
 import ErrorMessage from "../error-message/error-message.jsx";
-
-const textarea = {
-  MIN_LENGTH: 50,
-  MAX_LENGTH: 300
-};
 
 class ReviewForm extends React.PureComponent {
   constructor(props) {
     super(props);
     this.inputRefs = [];
     this.reviewRef = createRef();
-    this.clientEvaluations = [`perfect`, `good`, `not bad`, `badly`, `terribly`];
+
+    this.clientEvaluations = [
+      ClientEvaluation.PERFECT,
+      ClientEvaluation.GOOD,
+      ClientEvaluation.NOT_BAD,
+      ClientEvaluation.BADLY,
+      ClientEvaluation.TERRIBLY
+    ];
 
     this._handleSubmit = this._handleSubmit.bind(this);
     this._handleInputChange = this._handleInputChange.bind(this);
     this._resetForm = this._resetForm.bind(this);
     this._checkIfIsValid = this._checkIfIsValid.bind(this);
     this._handleTextareaChange = this._handleTextareaChange.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    const {activeItem} = this.props;
+
+    if (activeItem !== prevProps.activeItem) {
+      this._checkIfIsValid();
+    }
   }
 
   createRefs() {
@@ -30,12 +41,12 @@ class ReviewForm extends React.PureComponent {
 
   _resetForm() {
     const {
-      resetActiveItem: unCheckCheckbox,
-      toggleItem: toggleSubmitButton
+      onItemSet: uncheckCheckbox,
+      onItemToggle: toggleSubmitButton
     } = this.props;
 
     toggleSubmitButton(true);
-    unCheckCheckbox();
+    uncheckCheckbox();
 
     this.reviewRef.current.value = ``;
   }
@@ -43,12 +54,12 @@ class ReviewForm extends React.PureComponent {
   _checkIfIsValid() {
     const {
       activeItem: checkedInput,
-      toggleItem: disableSubmitButton
+      onItemToggle: disableSubmitButton
     } = this.props;
 
     const inputIsChecked = checkedInput > 0 || checkedInput === 0;
     const textareaValue = this.reviewRef.current.value.length;
-    const isTextIsValid = textareaValue > textarea.MIN_LENGTH && textareaValue < textarea.MAX_LENGTH;
+    const isTextIsValid = textareaValue > Textarea.MIN_LENGTH && textareaValue < Textarea.MAX_LENGTH;
 
     if (isTextIsValid && inputIsChecked) {
       disableSubmitButton(false);
@@ -59,7 +70,7 @@ class ReviewForm extends React.PureComponent {
 
   _handleInputChange(id) {
     const {
-      setActiveItem: checkInput,
+      onItemSet: checkInput,
     } = this.props;
 
     checkInput(id);
@@ -70,22 +81,11 @@ class ReviewForm extends React.PureComponent {
     this._checkIfIsValid();
   }
 
-  componentDidUpdate(prevProps) {
-    const {activeItem, isError} = this.props;
-
-    if (activeItem !== prevProps.activeItem) {
-      this._checkIfIsValid();
-    }
-    if (isError !== prevProps.isError) {
-      this._resetForm();
-    }
-  }
-
   _handleSubmit(evt) {
     const {
       onSubmit,
       activeItem: checkedInput,
-      toggleItem: toggleSubmitButton,
+      onItemToggle: toggleSubmitButton,
       offerId
     } = this.props;
 
@@ -160,12 +160,12 @@ class ReviewForm extends React.PureComponent {
 ReviewForm.propTypes = {
   isError: PropTypes.bool,
   offerId: PropTypes.number.isRequired,
-  setActiveItem: PropTypes.func,
+  onItemSet: PropTypes.func,
+  onItemReset: PropTypes.func,
   activeItem: PropTypes.number,
   disabledItem: PropTypes.bool,
-  toggleItem: PropTypes.func,
-  onSubmit: PropTypes.func,
-  resetActiveItem: PropTypes.func,
+  onItemToggle: PropTypes.func,
+  onSubmit: PropTypes.func
 };
 
 export default ReviewForm;

@@ -30,7 +30,13 @@ const detailedOfferShape = Object.assign({}, offerShape, {
   price: PropTypes.number.isRequired,
   goods: PropTypes.arrayOf(PropTypes.string).isRequired,
   host: PropTypes.shape(hostShape).isRequired,
-}
-);
+});
 
-export {cityShape, offerShape, detailedOfferShape};
+const commentShape = {
+  comment: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  rating: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired
+};
+
+export {cityShape, offerShape, detailedOfferShape, commentShape};

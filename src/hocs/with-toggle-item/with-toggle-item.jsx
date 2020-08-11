@@ -7,10 +7,10 @@ const withToggleItem = (Component, initialValue = true) => {
       this.state = {
         isDisabled: initialValue,
       };
-      this._toggleItem = this._toggleItem.bind(this);
+      this._handleItemToggle = this._handleItemToggle.bind(this);
     }
 
-    _toggleItem(bool) {
+    _handleItemToggle(bool) {
       this.setState(() => {
         return {isDisabled: bool};
       });
@@ -21,7 +21,7 @@ const withToggleItem = (Component, initialValue = true) => {
 
       return <Component
         {...this.props}
-        toggleItem={this._toggleItem}
+        onItemToggle={this._handleItemToggle}
         disabledItem={isDisabled}
       />;
     }

@@ -11,7 +11,7 @@ it(`Bookmark button renders correctly`, () => {
           offerId={1}
           toggleItem={() => {}}
           onButtonClick={() => {}}
-        />
+          onItemToggle={() => {}}/>
     )
     .toJSON();
   expect(tree).toMatchSnapshot();

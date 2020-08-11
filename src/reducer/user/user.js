@@ -1,3 +1,6 @@
+import {Operation as DataOperation} from "../data/data";
+import {mapHotels} from "../../data/adapter";
+
 const AuthorizationStatus = {
   AUTH: `AUTH`,
   NO_AUTH: `NO_AUTH`,
@@ -50,6 +53,7 @@ const Operation = {
         dispatch(ActionCreator.setAuthStatus(AuthorizationStatus.AUTH));
         const mappedData = adapter(response.data);
         dispatch(ActionCreator.setUser(mappedData));
+        dispatch(DataOperation.getFavorites(mapHotels));
       })
       .catch(() => {
         dispatch(ActionCreator.setAuthStatus(AuthorizationStatus.NO_AUTH));

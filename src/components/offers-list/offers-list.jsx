@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {offerShape} from "../../types";
 import OfferCard from "../offer-card/offer-card.jsx";
 
 const OffersList = (props) => {
@@ -30,7 +31,7 @@ const OffersList = (props) => {
 };
 
 OffersList.propTypes = {
-  offers: PropTypes.arrayOf(PropTypes.object).isRequired,
+  offers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired,
   classNamePrefix: PropTypes.string.isRequired,
   onFavoriteButtonClick: PropTypes.func.isRequired,
   onCardTitleClick: PropTypes.func.isRequired,

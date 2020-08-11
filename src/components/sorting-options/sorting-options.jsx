@@ -1,22 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {SortingLabel, SortingValue} from "../../const.js";
 
 const options = [
   {
-    label: `Popular`,
-    value: `popular`,
+    label: SortingLabel.POPULAR,
+    value: SortingValue.POPULAR,
   },
   {
-    label: `Price: low to high`,
-    value: `to-high`,
+    label: SortingLabel.TO_HIGH,
+    value: SortingValue.TO_HIGH,
   },
   {
-    label: `Price: high to low`,
-    value: `to-low`,
+    label: SortingLabel.TO_LOW,
+    value: SortingValue.TO_LOW,
   },
   {
-    label: `Top rated first`,
-    value: `top-rated`,
+    label: SortingLabel.TOP_RATED,
+    value: SortingValue.TOP_RATED,
   }
 ];
 

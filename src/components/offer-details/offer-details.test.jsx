@@ -49,8 +49,8 @@ it(`Property page renders correctly`, () => {
             cityCoords={[0, 2]}
             cityZoom={1}
             onSubmit={() => {}}
-            resetActiveItem={() => {}}
-            setActiveItem={() => {}}
+            onItemReset={() => {}}
+            onItemSet={() => {}}
             hotelId={0}
             offers={[offer]}
             onFavoriteButtonClick={() => {}}

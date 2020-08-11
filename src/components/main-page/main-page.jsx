@@ -6,6 +6,7 @@ import OffersList from "../offers-list/offers-list.jsx";
 import Header from "../header/header.jsx";
 import Map from "../map/map.jsx";
 import LocationsList from "../locations-list/locations-list.jsx";
+import {offerShape} from "../../types";
 
 const MainPage = (props) => {
   const {
@@ -18,12 +19,11 @@ const MainPage = (props) => {
     cityCoords,
     cityZoom,
     activeLocation,
-    setActiveItem,
-    resetActiveItem,
+    onItemSet,
+    onItemReset,
     onMenuClick,
     onSortingClick,
     activeItem,
-    detailedOffer,
     onFavoriteButtonClick,
     onCardTitleClick
   } = props;
@@ -56,8 +56,8 @@ const MainPage = (props) => {
               />
               <OffersList
                 offers={offers}
-                onCardHover={setActiveItem}
-                onCardMouseLeave={resetActiveItem}
+                onCardHover={onItemSet}
+                onCardMouseLeave={onItemReset}
                 onCardTitleClick={onCardTitleClick}
                 classNamePrefix={`cities`}
                 onFavoriteButtonClick={onFavoriteButtonClick}
@@ -69,7 +69,6 @@ const MainPage = (props) => {
                   offers={offers}
                   cityCoords={cityCoords}
                   cityZoom={cityZoom}
-                  detailedOffer={detailedOffer}
                   activeCard={activeItem}
                 />
               </section>
@@ -85,7 +84,7 @@ MainPage.propTypes = {
   isUserLoggedIn: PropTypes.bool.isRequired,
   userEmail: PropTypes.string,
   userPhoto: PropTypes.string,
-  offers: PropTypes.arrayOf(PropTypes.object).isRequired,
+  offers: PropTypes.arrayOf(PropTypes.shape(offerShape)),
   activeLocation: PropTypes.shape(cityShape),
   onMenuClick: PropTypes.func.isRequired,
   onSortingClick: PropTypes.func.isRequired,
@@ -93,12 +92,11 @@ MainPage.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.shape(cityShape)).isRequired,
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
   cityZoom: PropTypes.number.isRequired,
-  setActiveItem: PropTypes.func.isRequired,
-  resetActiveItem: PropTypes.func.isRequired,
+  onItemSet: PropTypes.func.isRequired,
+  onItemReset: PropTypes.func.isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   onFavoriteButtonClick: PropTypes.func.isRequired,
-  activeItem: PropTypes.object,
-  detailedOffer: PropTypes.object
+  activeItem: PropTypes.shape(offerShape)
 };
 
 export default MainPage;

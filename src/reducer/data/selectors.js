@@ -1,6 +1,7 @@
 import {createSelector} from "reselect";
-import NameSpace from "../name-space.js";
+import NameSpace from "../name-space";
 import {getActiveSorting, getChosenCityName} from "../app/selectors";
+import {SortingValue} from "../../const";
 
 const getOffers = (state) => {
   return state[NameSpace.DATA].offers;
@@ -28,11 +29,11 @@ const getFavoriteOffers = (state) => {
 
 const sortOffers = (offers, activeSort) => {
   switch (activeSort) {
-    case `to-high`:
+    case SortingValue.TO_HIGH:
       return offers.slice().sort((a, b) => (a.price > b.price) ? 1 : -1);
-    case `to-low`:
+    case SortingValue.TO_LOW:
       return offers.slice().sort((a, b) => (a.price < b.price) ? 1 : -1);
-    case `top-rated`:
+    case SortingValue.TOP_RATED:
       return offers.slice().sort((a, b) => (a.rating < b.rating) ? 1 : -1);
     default:
       return offers;

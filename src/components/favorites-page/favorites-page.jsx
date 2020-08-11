@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {offerShape} from "../../types";
+import {DEFAULT_ERROR_MESSAGE} from "../../const";
 import Header from "../header/header.jsx";
 import Footer from "../footer/footer.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
@@ -55,7 +56,7 @@ const FavoritesPage = (props) => {
           {offersLoadError &&
             <FavoritesPlaceholder
               heading={`Error`}
-              title={`Something went wrong. Please try again later.`}
+              title={DEFAULT_ERROR_MESSAGE}
               description={``}
             />
           }
@@ -74,12 +75,12 @@ FavoritesPage.propTypes = {
         offers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired
       }
   )).isRequired,
-  offersLoadError: PropTypes.bool,
   isUserLoggedIn: PropTypes.bool.isRequired,
-  userEmail: PropTypes.string,
-  userPhoto: PropTypes.string,
   onFavoriteButtonClick: PropTypes.func.isRequired,
-  onCardTitleClick: PropTypes.func.isRequired
+  onCardTitleClick: PropTypes.func.isRequired,
+  offersLoadError: PropTypes.bool,
+  userEmail: PropTypes.string,
+  userPhoto: PropTypes.string
 };
 
 export default FavoritesPage;

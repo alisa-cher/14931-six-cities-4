@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import leaflet from "leaflet";
+import {detailedOfferShape, offerShape} from "../../types";
 
 const mapConfig = {
   ICON_SIZE: [30, 30],
@@ -110,11 +111,10 @@ const coordinate = {
 
 Map.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.shape({location: PropTypes.shape(coordinate)})).isRequired,
-  activeOffer: PropTypes.object,
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
   cityZoom: PropTypes.number.isRequired,
-  activeCard: PropTypes.object,
-  detailedOffer: PropTypes.object
+  activeCard: PropTypes.shape(offerShape),
+  detailedOffer: PropTypes.shape(detailedOfferShape),
 };
 
 export default Map;

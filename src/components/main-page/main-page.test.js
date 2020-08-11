@@ -52,7 +52,9 @@ it(`Main page renders correctly`, () => {
             resetActiveItem={() => {}}
             activeSorting={`top-rated` }
             isUserLoggedIn={false}
-            onFavoriteButtonClick={() => {}}/>
+            onFavoriteButtonClick={() => {}}
+            onItemReset={() => {}}
+            onItemSet={() => {}}/>
         </BrowserRouter>
     )
     .toJSON();

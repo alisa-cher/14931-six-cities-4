@@ -1,23 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Header from "../header/header.jsx";
 
 const ErrorPage = (props) => {
   const {
     status,
-    description,
-    isUserLoggedIn,
-    userEmail,
-    userPhoto
+    description
   } = props;
 
   return (
     <div className="page page--gray page--main">
-      <Header
-        isUserLoggedIn={isUserLoggedIn}
-        email={userEmail}
-        photo={userPhoto}
-      />
       <main className="page__main page__main--index page__main--index-empty">
         <div className="cities">
           <div className="cities__places-container cities__places-container--empty container">

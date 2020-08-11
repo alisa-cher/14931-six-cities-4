@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {offerShape} from "../../types";
+import {offerShape, commentShape} from "../../types";
 import {sliceAnArray, capitalize} from "../../helpers";
 import {mapComments, mapHotels} from "../../data/adapter";
 import {filterOffersById, getNearbyOffers, getComments} from "../../reducer/data/selectors";
@@ -17,6 +17,7 @@ import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
 import withToggleItem from "../../hocs/with-toggle-item/with-toggle-item.jsx";
 
 const NEARBY_OFFERS_MAX_AMOUNT = 3;
+const PHOTO_MAX_AMOUNT = 6;
 const COMMENTS_MAX_AMOUNT = 10;
 const ReviewFormWrapped = withActiveItem(withToggleItem(ReviewForm));
 
@@ -45,8 +46,8 @@ class OfferDetails extends React.PureComponent {
       activeItem,
       nearbyOffers,
       comments,
-      setActiveItem,
-      resetActiveItem,
+      onItemSet,
+      onItemReset,
       cityCoords,
       cityZoom,
       onCardTitleClick
@@ -58,8 +59,9 @@ class OfferDetails extends React.PureComponent {
     const {avatar, isPro, name} = host;
     const commentsLength = comments.length;
     const offersToRender = sliceAnArray(nearbyOffers, NEARBY_OFFERS_MAX_AMOUNT);
-    const commentsToRender = sliceAnArray(comments, COMMENTS_MAX_AMOUNT);
-    const sortedComments = commentsToRender.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+    const photosToRender = sliceAnArray(photos, PHOTO_MAX_AMOUNT);
+    const sortedComments = comments.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+    const commentsToRender = sliceAnArray(sortedComments, COMMENTS_MAX_AMOUNT);
 
     const BookmarkButtonWrapped = withToggleItem(BookmarkButton, !isFavorite);
 
@@ -73,7 +75,7 @@ class OfferDetails extends React.PureComponent {
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {photos.map((photo) =>
+              {photosToRender.map((photo) =>
                 <div className="property__image-wrapper" key={photo}>
                   <img className="property__image" src={photo} alt="Photo studio"/>
                 </div>
@@ -149,7 +151,7 @@ class OfferDetails extends React.PureComponent {
               </div>
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{commentsLength}</span></h2>
-                <CommentsList comments={sortedComments}/>
+                <CommentsList comments={commentsToRender}/>
                 {isUserLoggedIn &&
                 <ReviewFormWrapped
                   onSubmit={onSubmit}
@@ -174,8 +176,8 @@ class OfferDetails extends React.PureComponent {
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <OffersList
               offers={offersToRender}
-              onCardHover={setActiveItem}
-              onCardMouseLeave={resetActiveItem}
+              onCardHover={onItemSet}
+              onCardMouseLeave={onItemReset}
               classNamePrefix={`near-places`}
               onFavoriteButtonClick={onFavoriteButtonClick}
               onCardTitleClick={onCardTitleClick}
@@ -191,19 +193,19 @@ OfferDetails.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired,
   nearbyOffers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired,
   cityCoords: PropTypes.arrayOf(PropTypes.number).isRequired,
+  comments: PropTypes.arrayOf(PropTypes.shape(commentShape)).isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   onGetComments: PropTypes.func.isRequired,
   onGetNearbyOffers: PropTypes.func.isRequired,
-  comments: PropTypes.array.isRequired,
   hotelId: PropTypes.number.isRequired,
   cityZoom: PropTypes.number.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  setActiveItem: PropTypes.func.isRequired,
-  resetActiveItem: PropTypes.func.isRequired,
+  onItemSet: PropTypes.func.isRequired,
+  onItemReset: PropTypes.func.isRequired,
   onFavoriteButtonClick: PropTypes.func.isRequired,
   isUserLoggedIn: PropTypes.bool,
   isSendReviewError: PropTypes.bool,
-  activeItem: PropTypes.object,
+  activeItem: PropTypes.shape(offerShape),
   userEmail: PropTypes.string,
   userPhoto: PropTypes.string
 };

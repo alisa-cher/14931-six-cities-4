@@ -7,10 +7,13 @@ exports[`Error message renders correctly 1`] = `
     Object {
       "color": "red",
       "display": "block",
-      "paddingTop": "5px",
+      "paddingTop": "15px",
     }
   }
 >
-  Something went wrong. Please try again later.
+  <span>
+    Something went wrong. Please try again later.
+  </span>
+  
 </span>
 `;

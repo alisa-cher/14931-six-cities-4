@@ -177,7 +177,7 @@ exports[`App renders correctly 1`] = `
                 defaultValue="popular"
                 value="top-rated"
               >
-                Top rated first
+                Price: high to low
               </option>
             </select>
           </form>

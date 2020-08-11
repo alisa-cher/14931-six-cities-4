@@ -1,5 +1,6 @@
 import React, {createRef} from "react";
 import PropTypes from "prop-types";
+import ErrorMessage from "../error-message/error-message.jsx";
 
 class AuthPage extends React.PureComponent {
   constructor(props) {
@@ -19,9 +20,11 @@ class AuthPage extends React.PureComponent {
       login: this.emailRef.current.value,
       password: this.passwordRef.current.value,
     });
+
   }
 
   render() {
+    const {isError} = this.props;
 
     return (
       <div className="page page--gray page--login">
@@ -55,14 +58,15 @@ class AuthPage extends React.PureComponent {
               <form className="login__form form" action="#" method="post" onSubmit={this.handleSubmit}>
                 <div className="login__input-wrapper form__input-wrapper">
                   <label className="visually-hidden">E-mail</label>
-                  <input ref={this.emailRef} className="login__input form__input" type="email" name="email" placeholder="Email" required=""/>
+                  <input ref={this.emailRef} className="login__input form__input" type="email" name="email" placeholder="Email" required/>
                 </div>
                 <div className="login__input-wrapper form__input-wrapper">
                   <label className="visually-hidden">Password</label>
                   <input ref={this.passwordRef} className="login__input form__input" type="password" name="password" placeholder="Password"
-                    required=""/>
+                    required/>
                 </div>
                 <button className="login__submit form__submit button" type="submit">Sign in</button>
+                {isError && <ErrorMessage tag={`span`} content={isError}/>}
               </form>
             </section>
             <section className="locations locations--login locations--current">
@@ -80,7 +84,8 @@ class AuthPage extends React.PureComponent {
 }
 
 AuthPage.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  isError: PropTypes.string
 };
 
 export default AuthPage;

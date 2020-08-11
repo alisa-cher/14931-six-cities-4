@@ -14,11 +14,11 @@ describe(`e2e tests for withActiveItem hoc`, () => {
     expect(state.isDisabled).toBe(true);
   });
 
-  it(`Component state changes when called _toggleItem`, () => {
-    const setToggleItemSpy = jest.spyOn(NewComponent.prototype, `_toggleItem`);
+  it(`Component state changes when called _handleItemToggle`, () => {
+    const setToggleItemSpy = jest.spyOn(NewComponent.prototype, `_handleItemToggle`);
     const wrapper = shallow(<NewComponent/>);
 
-    wrapper.find(MockComponent).props().toggleItem(false);
+    wrapper.find(MockComponent).props().onItemToggle(false);
     expect(setToggleItemSpy).toHaveBeenCalled();
 
     const state = wrapper.state();

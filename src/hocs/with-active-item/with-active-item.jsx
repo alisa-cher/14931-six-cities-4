@@ -7,17 +7,17 @@ const withActiveItem = (Component) => {
       this.state = {
         activeItem: null,
       };
-      this._setActiveItem = this._setActiveItem.bind(this);
-      this._resetActiveItem = this._resetActiveItem.bind(this);
+      this._handleItemSet = this._handleItemSet.bind(this);
+      this._handleItemReset = this._handleItemReset.bind(this);
     }
 
-    _setActiveItem(item) {
+    _handleItemSet(item) {
       this.setState(() => {
         return {activeItem: item};
       });
     }
 
-    _resetActiveItem() {
+    _handleItemReset() {
       this.setState(() => {
         return {activeItem: null};
       });
@@ -28,8 +28,8 @@ const withActiveItem = (Component) => {
 
       return <Component
         {...this.props}
-        setActiveItem={this._setActiveItem}
-        resetActiveItem={this._resetActiveItem}
+        onItemSet={this._handleItemSet}
+        onItemReset={this._handleItemReset}
         activeItem={activeItem}
       />;
     }

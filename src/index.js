@@ -22,14 +22,18 @@ const store = createStore(reducer, composeEnhancers(
     applyMiddleware(thunk.withExtraArgument(api))
 ));
 
-const init = () => {
+const init = (isError) => {
   ReactDOM.render(
       <Provider store={store}>
-        <App/>
+        <App isError={isError}/>
       </Provider>,
       document.querySelector(`#root`)
   );
 };
 
 store.dispatch(UserOperation.checkAuth(mapUser));
-store.dispatch(DataOperation.loadOffers(mapHotels)).then(() => init());
+store.dispatch(DataOperation.loadOffers(mapHotels))
+  .then(() => init(``))
+  .catch((err) => {
+    init(err.message);
+  });

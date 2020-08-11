@@ -67,7 +67,7 @@ const Operation = {
         dispatch(AppActionCreator.setActiveLocation(state.data.offers[0].city));
       })
       .catch((error) => {
-        dispatch(ErrorActionCreator.setOffersLoadError(true));
+        dispatch(ErrorActionCreator.setOffersLoadError(error));
         throw error;
       });
   },

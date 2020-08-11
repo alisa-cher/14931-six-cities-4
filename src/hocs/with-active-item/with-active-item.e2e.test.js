@@ -15,10 +15,10 @@ describe(`e2e tests for withActiveItem hoc`, () => {
   });
 
   it(`Component state changes when called onItemHover`, () => {
-    const setActiveItemSpy = jest.spyOn(NewComponent.prototype, `_setActiveItem`);
+    const setActiveItemSpy = jest.spyOn(NewComponent.prototype, `_handleItemSet`);
     const wrapper = shallow(<NewComponent/>);
 
-    wrapper.find(MockComponent).props().setActiveItem({city: `test city`});
+    wrapper.find(MockComponent).props().onItemSet({city: `test city`});
     expect(setActiveItemSpy).toHaveBeenCalled();
 
     const state = wrapper.state();
@@ -27,10 +27,10 @@ describe(`e2e tests for withActiveItem hoc`, () => {
   });
 
   it(`Component state changes when called onItemMouseLeave`, () => {
-    const resetActiveItemSpy = jest.spyOn(NewComponent.prototype, `_resetActiveItem`);
+    const resetActiveItemSpy = jest.spyOn(NewComponent.prototype, `_handleItemReset`);
     const wrapper = shallow(<NewComponent/>);
 
-    wrapper.find(MockComponent).props().resetActiveItem();
+    wrapper.find(MockComponent).props().onItemReset();
     expect(resetActiveItemSpy).toHaveBeenCalled();
 
     const state = wrapper.state();

@@ -1,18 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-const button = {
-  STATUS: {
-    IS_FAVORITE: 1,
-    IS_NOT_FAVORITE: 0,
-  },
-  SIZE: {
-    BIG_BUTTON_WIDTH: 32,
-    BIG_BUTTON_HEIGHT: 33,
-    SMALL_BUTTON_WIDTH: 18,
-    SMALL_BUTTON_HEIGHT: 19,
-  }
-};
+import {Button} from "../../const.js";
 
 class BookmarkButton extends React.PureComponent {
   constructor(props) {
@@ -23,11 +11,11 @@ class BookmarkButton extends React.PureComponent {
   _toggleButton(isDisabled, newStatus) {
     const {
       offerId,
-      toggleItem,
+      onItemToggle,
       onButtonClick
     } = this.props;
 
-    toggleItem(isDisabled);
+    onItemToggle(isDisabled);
     onButtonClick(offerId, newStatus);
   }
 
@@ -37,9 +25,9 @@ class BookmarkButton extends React.PureComponent {
     } = this.props;
 
     if (disabledItem) {
-      this._toggleButton(false, button.STATUS.IS_FAVORITE);
+      this._toggleButton(false, Button.STATUS.IS_FAVORITE);
     } else {
-      this._toggleButton(true, button.STATUS.IS_NOT_FAVORITE);
+      this._toggleButton(true, Button.STATUS.IS_NOT_FAVORITE);
     }
   }
 
@@ -62,8 +50,8 @@ class BookmarkButton extends React.PureComponent {
         className={basicButtonClass + ` ` + (!disabledItem ? activeClass : ``)}
         type="button">
         <svg className={basicIconClass}
-          width={isBig ? button.SIZE.BIG_BUTTON_WIDTH : button.SIZE.SMALL_BUTTON_WIDTH}
-          height={isBig ? button.SIZE.BIG_BUTTON_HEIGHT : button.SIZE.SMALL_BUTTON_HEIGHT}>
+          width={isBig ? Button.SIZE.BIG_BUTTON_WIDTH : Button.SIZE.SMALL_BUTTON_WIDTH}
+          height={isBig ? Button.SIZE.BIG_BUTTON_HEIGHT : Button.SIZE.SMALL_BUTTON_HEIGHT}>
           <use xlinkHref="#icon-bookmark"/>
         </svg>
         <span className="visually-hidden">To bookmarks</span></button>
@@ -74,7 +62,7 @@ class BookmarkButton extends React.PureComponent {
 BookmarkButton.propTypes = {
   offerId: PropTypes.number.isRequired,
   isFavorite: PropTypes.bool.isRequired,
-  toggleItem: PropTypes.func.isRequired,
+  onItemToggle: PropTypes.func.isRequired,
   classNamePrefix: PropTypes.string.isRequired,
   onButtonClick: PropTypes.func.isRequired,
   disabledItem: PropTypes.bool,

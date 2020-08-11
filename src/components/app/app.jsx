@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Router, Route, Switch} from "react-router-dom";
+import {Router, Route, Switch, Redirect} from "react-router-dom";
 import {connect} from "react-redux";
 import {AuthorizationStatus} from "../../reducer/user/user";
 import {ActionCreator as AppActionCreator} from "../../reducer/app/app.js";
+import {ActionCreator as ErrorActionCreator} from "../../reducer/errors/errors.js";
 import {Operation as UserOperation} from "../../reducer/user/user";
 import {Operation as DataOperation} from "../../reducer/data/data";
 import {
@@ -15,6 +16,7 @@ import {
 import {mapComments, mapHotels, mapUser} from "../../data/adapter";
 import {getCityCoords, getCityZoom, getActiveSorting, getCurrentCity} from "../../reducer/app/selectors";
 import {getAuthorisationStatus, getUserEmail, getUserPhoto} from "../../reducer/user/selectors";
+import {DEFAULT_ERROR_MESSAGE, AppRouting} from "../../const";
 import history from "../../history";
 import PrivateRoute from "../private-route/private-route.jsx";
 import OfferDetails from "../offer-details/offer-details.jsx";
@@ -23,29 +25,39 @@ import MainPage from "../main-page/main-page.jsx";
 import AuthPage from "../auth-page/auth-page.jsx";
 import FavoritesPage from "../favorites-page/favorites-page.jsx";
 import withActiveItem from "../../hocs/with-active-item/with-active-item.jsx";
-import {offerShape} from "../../types";
+import {offerShape, cityShape} from "../../types";
 
 const MainPageWrapped = withActiveItem(MainPage);
 const OfferDetailsWrapped = withActiveItem(OfferDetails);
 
-class App extends React.PureComponent {
+const App = (props) => {
+  const {
+    userEmail,
+    userPhoto,
+    offers,
+    onFavoriteButtonClick,
+    onMenuClick,
+    onSortingClick,
+    activeSorting,
+    locations,
+    city,
+    networkError,
+    login,
+    cityCoords,
+    cityZoom,
+    onCardTitleClick,
+    onCommentSend,
+    isSendReviewError,
+    isError,
+    isFavoriteOffersLoadError,
+    favoriteOffers,
+    authStatus
+  } = props;
 
-  _renderMainPage(isUserLoggedIn) {
-    const {
-      userEmail,
-      userPhoto,
-      offers,
-      onFavoriteButtonClick,
-      onMenuClick,
-      onSortingClick,
-      activeSorting,
-      locations,
-      city,
-      cityCoords,
-      cityZoom,
-      onCardTitleClick
-    } = this.props;
+  const isUserLoggedIn = (authStatus === AuthorizationStatus.AUTH);
+  const offersLoaded = !!offers.length;
 
+  const renderMainPage = () => {
     return <MainPageWrapped
       isUserLoggedIn={isUserLoggedIn}
       userEmail={userEmail}
@@ -61,21 +73,9 @@ class App extends React.PureComponent {
       cityZoom={cityZoom}
       onCardTitleClick={onCardTitleClick}
     />;
-  }
+  };
 
-  _renderPropertyPage(isUserLoggedIn, hotelId) {
-    const {
-      userEmail,
-      userPhoto,
-      offers,
-      cityCoords,
-      cityZoom,
-      onCommentSend,
-      onFavoriteButtonClick,
-      onCardTitleClick,
-      isSendReviewError
-    } = this.props;
-
+  const renderPropertyPage = (hotelId) => {
     return <OfferDetailsWrapped
       isUserLoggedIn={isUserLoggedIn}
       userEmail={userEmail}
@@ -89,14 +89,21 @@ class App extends React.PureComponent {
       cityZoom={cityZoom}
       isSendReviewError={isSendReviewError}
     />;
-  }
+  };
 
-  _render404Page(isUserLoggedIn) {
-    const {
-      userEmail,
-      userPhoto
-    } = this.props;
+  const renderFavoritesPage = () =>{
+    return <FavoritesPage
+      offers={favoriteOffers}
+      isUserLoggedIn={isUserLoggedIn}
+      userPhoto={userPhoto}
+      userEmail={userEmail}
+      offersLoadError={isFavoriteOffersLoadError}
+      onFavoriteButtonClick={onFavoriteButtonClick}
+      onCardTitleClick={onCardTitleClick}
+    />;
+  };
 
+  const render404Page = () => {
     return <ErrorPage
       isUserLoggedIn={isUserLoggedIn}
       userEmail={userEmail}
@@ -104,136 +111,116 @@ class App extends React.PureComponent {
       status={`404`}
       description={`Page is not found.`}
     />;
+  };
+
+  if (isError) {
+    return <ErrorPage
+      isUserLoggedIn={isUserLoggedIn}
+      userEmail={userEmail}
+      userPhoto={userPhoto}
+      status={isError}
+      description={DEFAULT_ERROR_MESSAGE}
+    />;
   }
 
-  render() {
-
-    const {
-      login,
-      authStatus,
-      userEmail,
-      userPhoto,
-      offers,
-      isOffersLoadError,
-      isFavoriteOffersLoadError,
-      onFavoriteButtonClick,
-      favoriteOffers,
-      onCardTitleClick
-    } = this.props;
-
-    const isUserLoggedIn = (authStatus === AuthorizationStatus.AUTH);
-    const offersLoaded = !!offers.length;
-
-    return <Router history={history}>
-      <Switch>
-        <Route exact path="/login">
-          <AuthPage onSubmit={login}/>
-        </Route>
-        <Route
-          exact
-          path={`/`}
-          render={() => {
-            return (
-              <React.Fragment>
-                {!isOffersLoadError && this._renderMainPage(isUserLoggedIn)}
-                {isOffersLoadError && <ErrorPage
-                  isUserLoggedIn={isUserLoggedIn}
-                  userEmail={userEmail}
-                  userPhoto={userPhoto}
-                  status={`Something went wrong. Please try again later.`}
-                  description={``}
-                />}
-                {!offersLoaded && <ErrorPage
-                  isUserLoggedIn={isUserLoggedIn}
-                  userEmail={userEmail}
-                  userPhoto={userPhoto}
-                />}
-              </React.Fragment>
-            );
-          }}>
-        </Route>
-        <Route exact path="/offer/:hotel_id/" render={
-          (data) => {
-            const hotelId = parseInt(data.match.params[`hotel_id`], 10);
-            const offer = filterOffersById(offers, hotelId);
-            if (offer) {
-              return this._renderPropertyPage(isUserLoggedIn, hotelId);
-            }
-            return this._render404Page(isUserLoggedIn);
-          }
-        }>
-        </Route>
-        <PrivateRoute
-          exact
-          path={`/favorites`}
-          render={() => {
-            return (
-              <FavoritesPage
-                offers={favoriteOffers}
+  return <Router history={history}>
+    <Switch>
+      <Route exact path={AppRouting.LOGIN}>
+        <AuthPage onSubmit={login} isError={networkError}/>
+        {isUserLoggedIn && <Redirect to={AppRouting.MAIN} />}
+      </Route>
+      <Route
+        exact
+        path={AppRouting.MAIN}
+        render={() => {
+          return (
+            <React.Fragment>
+              {!isError && !offersLoaded && <ErrorPage
                 isUserLoggedIn={isUserLoggedIn}
-                userPhoto={userPhoto}
                 userEmail={userEmail}
-                offersLoadError={isFavoriteOffersLoadError}
-                onFavoriteButtonClick={onFavoriteButtonClick}
-                onCardTitleClick={onCardTitleClick}
-              />
-            );
-          }}/>
-        <Route path={`/`} render={() => this._render404Page(isUserLoggedIn)}/>
-      </Switch>
-    </Router>;
-  }
-}
+                userPhoto={userPhoto}
+                status={`No places to stay available.`}
+                description={``}
+              />}
+              {!isError && renderMainPage(isUserLoggedIn)}
+            </React.Fragment>
+          );
+        }}>
+      </Route>
+      <Route exact path={AppRouting.DETAILED_OFFER} render={
+        (data) => {
+          const hotelId = parseInt(data.match.params[`hotel_id`], 10);
+          const offer = filterOffersById(offers, hotelId);
+          if (offer) {
+            return renderPropertyPage(hotelId);
+          }
+          return render404Page();
+        }
+      }>
+      </Route>
+      <PrivateRoute
+        exact
+        path={AppRouting.FAVORITES}
+        render={() => renderFavoritesPage()}/>
+      <Route
+        path={AppRouting.MAIN}
+        render={() => render404Page()}
+      />
+    </Switch>
+  </Router>;
+};
 
 App.propTypes = {
   login: PropTypes.func.isRequired,
   onFavoriteButtonClick: PropTypes.func.isRequired,
   authStatus: PropTypes.string.isRequired,
   isSendReviewError: PropTypes.bool,
-  isOffersLoadError: PropTypes.bool,
   isFavoriteOffersLoadError: PropTypes.bool,
   onCommentSend: PropTypes.func.isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   userEmail: PropTypes.string,
   userPhoto: PropTypes.string,
-  user: PropTypes.object,
-  offers: PropTypes.arrayOf(PropTypes.object),
+  offers: PropTypes.arrayOf(PropTypes.shape(offerShape)),
   favoriteOffers: PropTypes.arrayOf(PropTypes.shape(
       {
         city: PropTypes.string.isRequired,
         offers: PropTypes.arrayOf(PropTypes.shape(offerShape)).isRequired
       }
   )),
-  locations: PropTypes.arrayOf(PropTypes.object),
-  city: PropTypes.object,
+  locations: PropTypes.arrayOf(PropTypes.shape(cityShape)),
+  city: PropTypes.shape(cityShape),
   cityCoords: PropTypes.arrayOf(PropTypes.number),
   cityZoom: PropTypes.number,
   onMenuClick: PropTypes.func,
   onSortingClick: PropTypes.func,
   activeSorting: PropTypes.string,
+  isError: PropTypes.string,
+  networkError: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
+  networkError: state.error.networkError,
   authStatus: getAuthorisationStatus(state),
   userEmail: getUserEmail(state),
   userPhoto: getUserPhoto(state),
-  isOffersLoadError: state.error.offersLoadError,
   isFavoriteOffersLoadError: state.error.favoriteOffersLoadError,
   isSendReviewError: state.error.postReviewError,
-  offers: state.error.offersLoadError ? [] : getVisibleOffers(state),
+  offers: !state.data.offers.length ? [] : getVisibleOffers(state),
   favoriteOffers: getFavoriteOffersGroupedByCity(state),
-  locations: state.error.offersLoadError ? [] : getAllCities(state),
-  city: state.error.offersLoadError ? {} : getCurrentCity(state),
-  activeSorting: state.error.offersLoadError ? `` : getActiveSorting(state),
-  cityCoords: state.error.offersLoadError ? [] : getCityCoords(state),
-  cityZoom: state.error.offersLoadError ? null : getCityZoom(state)
+  locations: !state.data.offers.length || state.error.offersLoadError ? [] : getAllCities(state),
+  city: !state.data.offers.length || state.error.offersLoadError ? {} : getCurrentCity(state),
+  activeSorting: !state.data.offers.length || state.error.offersLoadError ? `` : getActiveSorting(state),
+  cityCoords: !state.data.offers.length || state.error.offersLoadError ? [] : getCityCoords(state),
+  cityZoom: !state.data.offers.length || state.error.offersLoadError ? 0 : getCityZoom(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   login(authData) {
     dispatch(UserOperation.login(authData))
       .then(() => dispatch(UserOperation.checkAuth(mapUser)))
-      .then(() => history.push(`/favorites`));
+      .catch((err) => {
+        dispatch(ErrorActionCreator.setNetworkError(err.message));
+      });
   },
   onCommentSend(data, id, onSend, onSuccess) {
     dispatch(DataOperation.sendComment(data, id, onSend, onSuccess))
@@ -243,7 +230,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(UserOperation.checkAuth(mapUser))
       .then(() => dispatch(DataOperation.changeFavoriteStatus(data, offerId, status)))
       .then(() => dispatch(DataOperation.getFavorites(mapHotels)))
-      .catch(() => history.push(`/login`));
+      .catch(() => history.push(AppRouting.LOGIN));
   },
   onMenuClick(location) {
     dispatch(AppActionCreator.setActiveLocation(location));
