@@ -27,6 +27,7 @@ const offer = {
 };
 
 const comments = [{
+  id: 4,
   user: {
     name: `Emely`,
     avatarUrl: `https://htmlacademy-react-3.appspot.com/six-cities/static/avatar/8.jpg`},
